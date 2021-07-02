@@ -41,17 +41,20 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     //Create example stations
     let chatswood: Station = 
         Station { 
-            coords: pt2(-20.0, 40.0),
+            coords: pt2(-250.0, -250.0),
             name: String::from("Chatswood")
         };
     let st_leonards: Station = 
         Station {
-            coords: pt2(100.0,120.0),
+            coords: pt2(150.0, 150.0),
             name: String::from("St Leonards")
         };
 
     //Draw a line between the Chatswood coordinate and St Leonards coordinates
-    draw_line(&chatswood.coords, &st_leonards.coords, Srgb::<f32>::from_format(named::STEELBLUE), _app, &_f);
+    draw_straight_line(&chatswood.coords, &st_leonards.coords, Srgb::<f32>::from_format(named::STEELBLUE), _app, &_f);
+
+    //Draw a curved line from Chatswood coordinates to St Leonards coordinates
+    draw_curved_line(&chatswood.coords, &st_leonards.coords, Srgb::<f32>::from_format(named::CORAL), _app, &_f);
 
     //Draw the stations
     draw_station(&chatswood, _app, &_f);
@@ -78,7 +81,7 @@ fn draw_station(station: &Station, _app: &App, _frame: &Frame) {
 }
 
 //Takes in a start point, end point and colour to draw a line with.
-fn draw_line(sp: &Point2, ep: &Point2, colour: Srgb, _app: &App, _frame: &Frame) {
+fn draw_straight_line(sp: &Point2, ep: &Point2, colour: Srgb, _app: &App, _frame: &Frame) {
     let draw = _app.draw();
 
     //Establishing ownership
@@ -91,5 +94,53 @@ fn draw_line(sp: &Point2, ep: &Point2, colour: Srgb, _app: &App, _frame: &Frame)
         .weight(12.0)
         .color(colour);
     
+    draw.to_frame(_app, &_frame);
+}
+
+fn draw_curved_line(sp: &Point2, ep: &Point2, colour: Srgb, _app: &App, _frame: &Frame) {
+    let draw = _app.draw();
+
+    let start_point: Point2 = sp.clone();
+    let end_point: Point2 = ep.clone();
+    
+    //Get Pt2 distance of the start and end points
+    let d_p: Point2 = pt2(start_point.x - end_point.x, start_point.y - end_point.y);
+    
+    //From there, get the direct distance
+    let mut d: f32 = f32::pow(d_p.x, 2) + f32::pow(d_p.y, 2);
+    d = d.sqrt();
+
+    //Set intermediary points
+    let intermediary_1: Point2 = pt2(start_point.x, start_point.y + d/3.0); //Does Y rise first from sp. Can have option to do X first.
+    let intermediary_2: Point2 = pt2(end_point.x - d/3.0, end_point.y);
+    
+    //Draw lines between intermediary points
+    draw.line()
+        .start(start_point)
+        .end(intermediary_1)
+        .weight(12.0)
+        .color(colour);
+    draw.line()
+        .start(intermediary_1)
+        .end(intermediary_2)
+        .weight(12.0)
+        .color(colour);
+    draw.line()
+        .start(intermediary_2)
+        .end(end_point)
+        .weight(12.0)
+        .color(colour);
+
+    //Add circles to cover corners
+    draw.ellipse()
+        .x_y(intermediary_1.x, intermediary_1.y)
+        .w_h(12.0, 12.0)
+        .color(colour);
+    draw.ellipse()
+        .x_y(intermediary_2.x, intermediary_2.y)
+        .w_h(12.0, 12.0)
+        .color(colour);
+    
+    //Draw on frame
     draw.to_frame(_app, &_frame);
 }
