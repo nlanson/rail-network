@@ -4,7 +4,7 @@
 use nannou::prelude::*;
 use palette::Srgb;
 use palette::named;
-//use rand::Rng;
+use rand::Rng;
 
 fn main() {
     nannou::app(model)
@@ -12,20 +12,24 @@ fn main() {
         .run();
 }
 
+//Nannou application state.
 struct Model {
     _window: window::Id
 }
 
+//Sets the initial Model state.
 fn model(_app: &App) -> Model {
     Model {
         _window: _app.new_window().size(1440, 1000).view(view).build().unwrap()
     }
 }
 
+//Updates the model 60times per second
 fn update(_app: &App, _model: &mut Model, _update: Update) {
 
 }
 
+//Struct for storing station data.
 struct Station {
     coords: Point2,
     name: String
@@ -40,19 +44,19 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     
     //Create example stations
     let chatswood: Station = Station { 
-            coords: pt2(0.0, 250.0),
+            coords: pt2(0.0, 70.0),
             name: String::from("Chatswood")
     };
     let st_leonards: Station = Station {
-            coords: pt2(250.0, 0.0),
+            coords: pt2(70.0, 0.0),
             name: String::from("St Leonards")
     };
     let atarmon: Station = Station {
-        coords: pt2(-250.0, 0.0),
+        coords: pt2(-70.0, 0.0),
         name: String::from("Atarmon")
     };
     let north_sydney: Station = Station {
-        coords: pt2(0.0, -250.0),
+        coords: pt2(0.0, -70.0),
         name: String::from("North Sydney")
     };
 
@@ -60,10 +64,10 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     //draw_straight_line(&chatswood.coords, &st_leonards.coords, Srgb::<f32>::from_format(named::STEELBLUE), _app, &_f);
 
     //Draw curved lines for example stations
-    draw_curved_line(&chatswood.coords,   &st_leonards.coords,   X_Y::Y, Srgb::<f32>::from_format(named::CORAL), _app, &_f);
-    draw_curved_line(&st_leonards.coords,  &north_sydney.coords, X_Y::Y, Srgb::<f32>::from_format(named::CORAL), _app, &_f);
-    draw_curved_line(&north_sydney.coords, &atarmon.coords,      X_Y::Y, Srgb::<f32>::from_format(named::CORAL), _app, &_f);
-    draw_curved_line(&atarmon.coords,      &chatswood.coords,    X_Y::Y, Srgb::<f32>::from_format(named::CORAL), _app, &_f);
+    draw_curved_line(&chatswood.coords,    &st_leonards.coords,   X_Y::X, Srgb::<f32>::from_format(named::CORAL), _app, &_f);
+    draw_curved_line(&st_leonards.coords,  &north_sydney.coords,  X_Y::Y, Srgb::<f32>::from_format(named::CORAL), _app, &_f);
+    draw_curved_line(&north_sydney.coords, &atarmon.coords,       X_Y::X, Srgb::<f32>::from_format(named::CORAL), _app, &_f);
+    draw_curved_line(&atarmon.coords,      &chatswood.coords,     X_Y::Y, Srgb::<f32>::from_format(named::CORAL), _app, &_f);
 
     //Draw the stations
     draw_station(&chatswood, _app, &_f);
@@ -144,36 +148,47 @@ fn draw_curved_line(sp: &Point2, ep: &Point2, direction: X_Y, colour: Srgb, _app
     //Initialise intermediary points
     let intermediary_1: Point2;
     let intermediary_2: Point2;
+    let div_const: f32 = find_div_const(d);
 
-    //Matches the initial direction with varibal direction (either X or Y)
-    //and then set intermediary coords to lay somwhere in between the start/ends points.
+    /*
+        Matches the initial direction with varibal direction (either X or Y)
+        and then set intermediary coords to lay somwhere in between the start/ends points.
+        
+        Need to find an algo that will find the perfect intermediary points so that
+        the internal alternate angles formed with drawing northwards paralell lines through
+        the two intermediary points are equal to each other.
+        (eg: https://imgur.com/a/etOCMWY)
+
+        For now, the program finds the intermediary points by adding/subtracting a third of the
+        distance to the x/y coordinates from the start/end.
+    */
     match direction {
         //Go X axis first from start_point
-        X_Y::X => {//X DIR NOT WORKING
+        X_Y::X => {
             if end_point.x > start_point.x {
-                intermediary_1 = pt2(end_point.x - d/6.0, end_point.y);
+                intermediary_1 = pt2(start_point.x + d/div_const, start_point.y);
             } else {
-                intermediary_1 = pt2(end_point.x + d/6.0, end_point.y);
+                intermediary_1 = pt2(start_point.x - d/div_const, start_point.y);
             }
             
             if end_point.y > start_point.y {
-                intermediary_2 = pt2(start_point.x, start_point.y + d/6.0);
+                intermediary_2 = pt2(end_point.x, end_point.y - d/div_const);
             } else {
-                intermediary_2 = pt2(start_point.x, start_point.y - d/6.0);
+                intermediary_2 = pt2(end_point.x, end_point.y + d/div_const);
             }
         },
         //Go Y axis first from start_point
         X_Y::Y => {
             if end_point.y > start_point.y {
-                intermediary_1 = pt2(start_point.x, start_point.y + d/6.0);
+                intermediary_1 = pt2(start_point.x, start_point.y + d/div_const);
             } else {
-                intermediary_1 = pt2(start_point.x, start_point.y - d/6.0);
+                intermediary_1 = pt2(start_point.x, start_point.y - d/div_const);
             }
         
             if end_point.x > start_point.x {
-                intermediary_2= pt2(end_point.x - d/6.0, end_point.y);
+                intermediary_2= pt2(end_point.x - d/div_const, end_point.y);
             } else {
-                intermediary_2 = pt2(end_point.x + d/6.0, end_point.y);
+                intermediary_2 = pt2(end_point.x + d/div_const, end_point.y);
             }
         }
     }
@@ -207,4 +222,9 @@ fn draw_curved_line(sp: &Point2, ep: &Point2, direction: X_Y, colour: Srgb, _app
     
     //Draw on frame
     draw.to_frame(_app, &_frame);
+}
+
+//The larger the distance, the smaller the return value with a minimum of 1.5.
+fn find_div_const(dist: f32) -> f32 {
+    3.0
 }

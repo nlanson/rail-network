@@ -8,4 +8,4 @@ edition = "2018"
 [dependencies]
 nannou = "0.17"
 palette = "0.5.0"
-# rand = "0.8.4"
+rand = "0.8.4"
