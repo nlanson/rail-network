@@ -20,6 +20,9 @@ pub enum Dir {
     Y
 }
 
+/*
+    Fill the background with provided colour
+*/
 pub fn fill_background(colour: &str, _app: &App, _frame: &Frame) {
     let draw = _app.draw();
 

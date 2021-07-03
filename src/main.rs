@@ -39,6 +39,14 @@ fn update(_app: &App, _model: &mut Model, _update: Update) {
 
 }
 
+/**
+ * View Function:
+ * 
+ * Description for the map lives in here and is rendered.
+ * For now, the map info is hardcoded but eventually, there will be a module that
+ * autogenerates random maps into the Modal and the view function will simply render
+ * the Model.
+ */
 fn view(_app: &App, _model: &Model, _f: Frame) {
     //Fill in the background as beige.
     draw::fill_background("beige", _app, &_f);
