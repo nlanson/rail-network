@@ -41,7 +41,6 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
     let SPEPCONNECTION: Line = Line::new(start, end);
 
     //Points that are one third of the direction between sp and ep starting at sp and ep respectively
-    //THIS PART IS THE PART THAT IS SCREWING EVERYTHING UP!!!!
     let SP3: Point2 = SPEPCONNECTION.find_point_onethird(From::START);
     let EP3: Point2 = SPEPCONNECTION.find_point_onethird(From::END);
 
@@ -49,13 +48,12 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
     let SP3NORMAL: Equation = Equation::find_eq_slope_point(Equation::get_normal_grad(SPEPCONNECTION.find_eq_two_points().m), &SP3);
     let EP3NORMAL: Equation = Equation::find_eq_slope_point(Equation::get_normal_grad(SPEPCONNECTION.find_eq_two_points().m), &EP3);
 
-    /*
-        Set the equations for SPSTART and EPSTART (if possible), and find the intersection of those
-        and the NORMAL equations.
-    */
+    //Initialise EPSTART, SPSTART and intermediary points #1 and #2.
     let SPSTART: Equation;
     let EPSTART: Equation;
     let i1: Point2; let i2: Point2;
+
+    //Find them
     match dir {
         Direction::X => {
             //Equation for horizontal line starting at the start point.
@@ -77,6 +75,7 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
         }
     }
 
+    //Return them
     (i1, i2)
 }
 
@@ -93,6 +92,25 @@ struct Equation {
 impl Equation {
     pub fn solve(&self, x:f32) -> f32 {
         self.m*x + self.b
+    }
+
+    /**
+     * Finds the equation of a line from two points
+     */
+    pub fn find_eq_two_points(p1: &Point2, p2: &Point2) -> Self {
+        let y1: f32 = p1.y;
+        let y2: f32 = p2.y;
+        let x1: f32 = p1.x;
+        let x2: f32 = p2.x;
+
+        let m: f32 = (y2-y1)/(x2-x1); //m=(y2-y1)/(x2-x1)
+        let b: f32 = (y1) + (m*-x1);  //y-y1=m(x-x1) where b=(m*-x1)+y1
+        
+        //Return equation
+        Self {
+            m: m,
+            b: b
+        }
     }
     
     /**
@@ -160,19 +178,7 @@ impl Line {
      * Returns the Equation of the line connecting to two points.
      */
     pub fn find_eq_two_points(&self) -> Equation {
-        let y1: f32 = self.start.y;
-        let y2: f32 = self.end.y;
-        let x1: f32 = self.start.x;
-        let x2: f32 = self.end.x;
-
-        let m: f32 = (y2-y1)/(x2-x1); //m=(y2-y1)/(x2-x1)
-        let b: f32 = (y1) + (m*-x1);  //y-y1=m(x-x1) where b=(m*-x1)+y1
-        
-        //Return equation
-        Equation {
-            m: m,
-            b: b
-        }
+        Equation::find_eq_two_points(&self.start, &self.end)
     }
 
     /**
