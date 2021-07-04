@@ -65,24 +65,15 @@ pub fn curved_line(sp: &Point2, ep: &Point2, direction: Dir, colour: &str, _app:
     let mut d: f32 = f32::pow(d_p.x, 2) + f32::pow(d_p.y, 2);
     d = d.sqrt();
 
-    //Initialise intermediary points
-    let intermediary_1: Point2;
-    let intermediary_2: Point2;
-    let div_const: f32 = maths::find_div_const(d);
+    //Set the intermediary points (see notes below)
+    let intermediaries: (Point2, Point2) = maths::find_intermediaries(&start_point, &end_point, Dir::X);
+    let intermediary_1: Point2 = intermediaries.0;
+    let intermediary_2: Point2 = intermediaries.1;
 
     /*
-        Matches the initial direction with varibal direction (either X or Y)
-        and then set intermediary coords to lay somwhere in between the start/ends points.
-        
-        Need to find an algo that will find the perfect intermediary points so that
-        the internal alternate angles formed with drawing northwards paralell lines through
-        the two intermediary points are equal to each other.
-        (eg: https://imgur.com/a/etOCMWY)
-
-        For now, the program finds the intermediary points by adding/subtracting a third of the
-        distance to the x/y coordinates from the start/end.
-
-        Proposed method: (Image: https://imgur.com/a/gPKoSh1)
+        ~~~ MOSTLY IMPLEMENTED IN MATHS MODULE FOR THE TIME BEING  ~~~
+    
+        Proposed method for finding intermediary points: (Image: https://imgur.com/a/gPKoSh1)
             - Find the equation between sp and ep and find the point at a third and two thirds of the way 
               between sp and ep. [ Implemented as maths::find_eq() and maths::find_one_third_point() ]
             - Call the equation SPEPCONNECTION
@@ -98,36 +89,6 @@ pub fn curved_line(sp: &Point2, ep: &Point2, direction: Dir, colour: &str, _app:
             - Then find the intersection points of EP3NORMAL and EP3START. This will be
               intermediary point two.
     */
-    match direction {
-        //Go X axis first from start_point
-        Dir::X => {
-            if end_point.x > start_point.x {
-                intermediary_1 = pt2(start_point.x + d/div_const, start_point.y);
-            } else {
-                intermediary_1 = pt2(start_point.x - d/div_const, start_point.y);
-            }
-            
-            if end_point.y > start_point.y {
-                intermediary_2 = pt2(end_point.x, end_point.y - d/div_const);
-            } else {
-                intermediary_2 = pt2(end_point.x, end_point.y + d/div_const);
-            }
-        },
-        //Go Y axis first from start_point
-        Dir::Y => {
-            if end_point.y > start_point.y {
-                intermediary_1 = pt2(start_point.x, start_point.y + d/div_const);
-            } else {
-                intermediary_1 = pt2(start_point.x, start_point.y - d/div_const);
-            }
-        
-            if end_point.x > start_point.x {
-                intermediary_2= pt2(end_point.x - d/div_const, end_point.y);
-            } else {
-                intermediary_2 = pt2(end_point.x + d/div_const, end_point.y);
-            }
-        }
-    }
     
     //Draw lines between intermediary points
     draw.line()

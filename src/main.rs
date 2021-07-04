@@ -53,19 +53,19 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     
     //Create example stations
     let chatswood: Station = Station { 
-            coords: pt2(0.0, 70.0),
+            coords: pt2(0.0, 250.0),
             name: String::from("Chatswood")
     };
     let st_leonards: Station = Station {
-            coords: pt2(70.0, 0.0),
+            coords: pt2(250.0, 0.0),
             name: String::from("St Leonards")
     };
     let atarmon: Station = Station {
-        coords: pt2(-70.0, 0.0),
+        coords: pt2(-250.0, 0.0),
         name: String::from("Atarmon")
     };
     let north_sydney: Station = Station {
-        coords: pt2(0.0, -70.0),
+        coords: pt2(0.0, -250.0),
         name: String::from("North Sydney")
     };
 
