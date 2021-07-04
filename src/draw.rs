@@ -65,30 +65,10 @@ pub fn curved_line(sp: &Point2, ep: &Point2, direction: Dir, colour: &str, _app:
     let mut d: f32 = f32::pow(d_p.x, 2) + f32::pow(d_p.y, 2);
     d = d.sqrt();
 
-    //Set the intermediary points (see notes below)
-    let intermediaries: (Point2, Point2) = maths::find_intermediaries(&start_point, &end_point, Dir::X);
+    //Set the intermediary points (see notes in maths module)
+    let intermediaries: (Point2, Point2) = maths::find_intermediaries(&start_point, &end_point, direction);
     let intermediary_1: Point2 = intermediaries.0;
     let intermediary_2: Point2 = intermediaries.1;
-
-    /*
-        ~~~ MOSTLY IMPLEMENTED IN MATHS MODULE FOR THE TIME BEING  ~~~
-    
-        Proposed method for finding intermediary points: (Image: https://imgur.com/a/gPKoSh1)
-            - Find the equation between sp and ep and find the point at a third and two thirds of the way 
-              between sp and ep. [ Implemented as maths::find_eq() and maths::find_one_third_point() ]
-            - Call the equation SPEPCONNECTION
-            - The two points to be SP3 (one third from sp) and EP3 (one third from ep).
-            - Get the equation for the NORMAL of SP3 and EP3 against line SPEPCONNECTION.
-              Call the lines SP3NORMAL and EP3NORMAL respectively.
-            - Get the equation for the line straight vertically/horizontally from SP.
-              Call this equation SPSTART.
-            - Get the equation for the line straight vertically/horizontally from EP.
-              Call this equation EPSTART.
-            - Now find the intersection points of SP3NORMAL and SPSTART. This will be 
-              intermediary point one.
-            - Then find the intersection points of EP3NORMAL and EP3START. This will be
-              intermediary point two.
-    */
     
     //Draw lines between intermediary points
     draw.line()

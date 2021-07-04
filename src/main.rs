@@ -60,29 +60,16 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
             coords: pt2(250.0, 0.0),
             name: String::from("St Leonards")
     };
-    let atarmon: Station = Station {
-        coords: pt2(-250.0, 0.0),
-        name: String::from("Atarmon")
-    };
-    let north_sydney: Station = Station {
-        coords: pt2(0.0, -250.0),
-        name: String::from("North Sydney")
-    };
 
     //Draw a line between the Chatswood coordinate and St Leonards coordinates
-    //draw_straight_line(&chatswood.coords, &st_leonards.coords, Srgb::<f32>::from_format(named::STEELBLUE), _app, &_f);
+    sl(&chatswood.coords, &st_leonards.coords, "steelblue", _app, &_f);
 
     //Draw curved lines for example stations
-    cl(&chatswood.coords,    &st_leonards.coords,   Direction::X, "coral", _app, &_f);
-    cl(&st_leonards.coords,  &north_sydney.coords,  Direction::Y, "coral", _app, &_f);
-    cl(&north_sydney.coords, &atarmon.coords,       Direction::X, "coral", _app, &_f);
-    cl(&atarmon.coords,      &chatswood.coords,     Direction::Y, "coral", _app, &_f);
+    cl(&chatswood.coords, &st_leonards.coords, Direction::Y, "coral", _app, &_f);
 
     //Draw the stations
     chatswood.draw(_app, &_f);
     st_leonards.draw(_app, &_f);
-    atarmon.draw(_app, &_f);
-    north_sydney.draw(_app, &_f);
 
 }
 
