@@ -57,13 +57,6 @@ pub fn curved_line(sp: &Point2, ep: &Point2, direction: Dir, colour: &str, _app:
 
     let start_point: Point2 = sp.clone();
     let end_point: Point2 = ep.clone();
-    
-    //Get Pt2 distance of the start and end points
-    let d_p: Point2 = pt2(start_point.x - end_point.x, start_point.y - end_point.y);
-    
-    //From there, get the direct distance
-    let mut d: f32 = f32::pow(d_p.x, 2) + f32::pow(d_p.y, 2);
-    d = d.sqrt();
 
     //Set the intermediary points (see notes in maths module)
     let intermediaries: (Point2, Point2) = maths::find_intermediaries(&start_point, &end_point, direction);
