@@ -84,7 +84,7 @@ pub fn curved_line(sp: &Point2, ep: &Point2, direction: Dir, colour: &str, _app:
 
         Proposed method: (Image: https://imgur.com/a/gPKoSh1)
             - Find the equation between sp and ep and find the point at a third and two thirds of the way 
-              between sp and ep. 
+              between sp and ep. [ Implemented as maths::find_eq() and maths::find_one_third_point() ]
             - Call the equation SPEPCONNECTION
             - The two points to be SP3 (one third from sp) and EP3 (one third from ep).
             - Get the equation for the NORMAL of SP3 and EP3 against line SPEPCONNECTION.
