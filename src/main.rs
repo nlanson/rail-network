@@ -83,6 +83,7 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     st_leonards.draw(_app, &_f);
     atarmon.draw(_app, &_f);
     north_sydney.draw(_app, &_f);
+
 }
 
 //Struct for storing station data.

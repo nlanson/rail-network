@@ -5,6 +5,7 @@
  * 
  */
 use nannou::prelude::Point2;
+use nannou::prelude::pt2;
 
 /**
  * Takes in two points, sp and ep, and returns the slope
@@ -21,6 +22,33 @@ pub fn find_eq(sp: &Point2, ep: &Point2) -> (f32, f32) {
     
     //Return slope and y-int as tuple
     (m, b)
+}
+
+/**
+ * Takes in a start point and end point and finds the point
+ * that is one third of the distance between the two from the
+ * start point.
+ */
+pub fn find_one_third_point(sp: &Point2, ep: &Point2) -> Point2 {
+    //let eq: (f32, f32) = find_eq(sp, ep);
+    let dist: Point2 = pt2(sp.x-ep.x, sp.y-ep.y);
+
+    let otx: f32;
+    let oty: f32;
+
+    if ep.x > sp.x {
+        otx = sp.x - dist.x/3.0;
+    } else {
+        otx = sp.x - dist.x/3.0
+    }
+
+    if ep.y > sp.y {
+        oty = sp.y - dist.y/3.0;
+    } else {
+        oty = sp.y - dist.y/3.0;
+    }
+
+    pt2(otx, oty)
 }
 
 /**
