@@ -44,6 +44,9 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Dir) -> (Point2, Point
                 m: 0.0,
                 b: sp.y
             };
+            
+            //Actually, the EPSTART function needs to be horizontal.
+            //Need to fix
             EPSTART = Equation {
                 m: 0.0,
                 b: ep.y
@@ -53,7 +56,7 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Dir) -> (Point2, Point
             let i1: Point2 = Equation::find_intersection(&SP3NORMAL, &SPSTART);
 
             //Find intersection of EPSTART and EP3NORMAL. This will be intermediary2.
-            let i2: Point2 = Equation::find_intersection(&EP3NORMAL, &EPSTART);
+            let i2: Point2 = Equation::find_intersection_wVert(&EP3NORMAL, ep.x);
 
             println!("-----");
             println!("Sp = {}, Ep = {}, SPEPCONNECTION is y={}x+{}", sp, ep, SPEPCONNECTION.find_eq_two_points().m, SPEPCONNECTION.find_eq_two_points().b);
@@ -93,6 +96,10 @@ struct Equation {
 }
 
 impl Equation {
+    pub fn solve(&self, x:f32) -> f32 {
+        self.m*x + self.b
+    }
+    
     /**
      * Takes in a gradient slope and a point to find the equation.
      * Equation is returned as a tuple (gradient, y-int) so it can
@@ -116,6 +123,10 @@ impl Equation {
         let y: f32 = f1.m*x+f1.b;
 
         pt2(x, y)
+    }
+
+    pub fn find_intersection_wVert(f: &Equation, x: f32) -> Point2 {
+        pt2(x, Equation::solve(f, x))
     }
 
      /**
