@@ -9,7 +9,6 @@
 use nannou::prelude::*;
 use palette::Srgb;
 use palette::named;
-use rand::Rng;
 
 //Internal Dependencies
 use super::maths;

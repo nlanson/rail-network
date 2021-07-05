@@ -4,9 +4,7 @@
 
 //External Dependencies
 use nannou::prelude::*;
-use palette::Srgb;
-use palette::named as colour;
-use rand::Rng;
+//use rand::Rng;
 
 //Internal Dependencies
 mod draw;

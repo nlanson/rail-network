@@ -57,9 +57,6 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
     //Find them
     match dir {
         Direction::X => {
-            /*
-                NOT WORKING, See Direction::Y
-            */
             //Equation for horizontal line starting at the start point.
             SPSTART = Equation { m: 0.0, b: sp.y };
 
