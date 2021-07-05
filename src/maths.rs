@@ -8,6 +8,7 @@
 //External Dependencies
 use nannou::prelude::Point2;
 use nannou::prelude::pt2;
+use nannou::prelude::Pow as Power;
 
 //Internal Dependencies
 use super::draw::Dir as Direction;
@@ -51,7 +52,7 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
     //Initialise EPSTART, SPSTART and intermediary points #1 and #2.
     let SPSTART: Equation;
     let EPSTART: Equation;
-    let i1: Point2; let i2: Point2;
+    let mut i1: Point2; let mut i2: Point2;
 
     //Find them
     match dir {
@@ -62,8 +63,22 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
             //Equation for horizontal line starting at the start point.
             SPSTART = Equation { m: 0.0, b: sp.y };
 
+            //Find candidates for intermediary points
             i1 = Equation::find_intersection(&SP3NORMAL, &SPSTART);
             i2 = Equation::find_intersection_wVert(&EP3NORMAL, ep.x);
+
+            //Get the distance from sp to i1 and ep to i2.
+            let i1_dist: f32 = Line::new(start, i1).get_distance();
+            let i2_dist: f32 = Line::new(end, i2).get_distance();
+
+            //Use the shorter line as the first intermediary point
+            if i1_dist < i2_dist {
+                let parallel_eq: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i1);
+                i2 = Equation::find_intersection(&parallel_eq, &EP3NORMAL);
+            } else {
+                let parallel_eq: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i2);
+                i1 = Equation::find_intersection(&parallel_eq, &SP3NORMAL);
+            }
         },
         Direction::Y => {
             //Equation for horizontal line at the end
@@ -73,26 +88,21 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
             i1 = Equation::find_intersection_wVert(&SP3NORMAL, sp.x);
             i2 = Equation::find_intersection(&EP3NORMAL, &EPSTART);
 
-            //Compare distance of the two from each respective end and use the shorter one.
-            let sp_i1: Line = Line::new(start, i1);
-            let ep_i2: Line = Line::new(end, i2);
-            let i1_dist: f32 = sp_i1.get_distance();
-            let i2_dist: f32 = ep_i2.get_distance();
+            //Get the distance from sp to i1 and ep to i2.
+            let i1_dist: f32 = Line::new(start, i1).get_distance();
+            let i2_dist: f32 = Line::new(end, i2).get_distance();
 
             
-            //USe the point with shorter distance to find the parallell line equation and subsequent second point distance.
+            //Uee the point with shorter distance to find the parallell line equation and subsequent second point distance.
             if i1_dist < i2_dist {
-                let parralell_connection: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i1);
-                i2 = Equation::find_intersection(&parralell_connection, &EP3NORMAL);
+                let parrallel_eq: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i1);
+                i2 = Equation::find_intersection(&parrallel_eq, &EP3NORMAL);
             } else {
-                let parralell_connection: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i2);
-                i1 = Equation::find_intersection(&parralell_connection, &SP3NORMAL);
+                let parrallel_eq: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i2);
+                i1 = Equation::find_intersection(&parrallel_eq, &SP3NORMAL);
             }
         }
     }
-
-    //Debug prints
-    println!("y={}x+{}", SPEPCONNECTION.find_eq_two_points().m, SPEPCONNECTION.find_eq_two_points().b);
 
     //Return them
     (i1, i2)
@@ -220,15 +230,14 @@ impl Line {
 
         //Equation to find the point a third of the way between start and end from the start
         //Taken from https://www.dummies.com/education/math/trigonometry/how-to-divide-a-line-segment-into-multiple-parts/#:~:text=To%20find%20the%20point%20that's,results%20to%20get%20the%20coordinates.
-        let dc: f32 = 4.0; //Change this variable to configure how long the curve lines are.
+        let dc: f32 = 3.0; //Change this variable to configure how long the curve lines are.
         pt2(start.x + (1.0/dc)*(end.x-start.x), start.y+(1.0/dc)*(end.y-start.y))
     }
 
 
     pub fn get_distance(&self) -> f32 {
         //Use d=sqrt((x_2-x_1)²+(y_2-y_1)²) 
-        
-        let base: f32 = 2.0;
-        f32::pow(self.end.x-self.start.x, 2)
+
+        ((self.end.x-self.start.x).pow(2.0) + (self.end.y-self.start.y).pow(2.0)).sqrt()
     }
 }

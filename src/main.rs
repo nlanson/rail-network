@@ -52,24 +52,26 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     draw::fill_background("beige", _app, &_f);
     
     //Create example stations
-    let chatswood: Station = Station { 
-            coords: pt2(0.0, 0.0),
-            name: String::from("Chatswood")
-    };
-    let st_leonards: Station = Station {
-            coords: pt2(250.0, 100.0),
-            name: String::from("St Leonards")
-    };
+    let chatswood: Station =    Station::new(pt2(0.0, 300.0), "Chatswood");
+    let st_leonards: Station =  Station::new(pt2(-300.0, 0.0), "St Leonards");
+    let atarmon: Station =      Station::new(pt2(0.0, -300.0), "Atarmon");
+    let north_sydney: Station = Station::new(pt2(300.0, 0.0), "North Sydney");
 
-    //Draw a line between the Chatswood coordinate and St Leonards coordinates
-    sl(&chatswood.coords, &st_leonards.coords, "steelblue", _app, &_f);
+    //Draw a straight line between example stations
+    sl(&chatswood.coords, &atarmon.coords, "steelblue", _app, &_f);
+    sl(&st_leonards.coords, &north_sydney.coords, "limegreen", _app, &_f);
 
     //Draw curved lines for example stations
-    cl(&chatswood.coords, &st_leonards.coords, Direction::Y, "coral", _app, &_f);
+    cl(&chatswood.coords, &st_leonards.coords, Direction::X, "coral", _app, &_f);
+    cl(&st_leonards.coords, &atarmon.coords, Direction::Y, "coral", _app, &_f);
+    cl(&atarmon.coords, &north_sydney.coords, Direction::X, "coral", _app, &_f);
+    cl(&north_sydney.coords, &chatswood.coords, Direction::Y, "coral", _app, &_f);
 
     //Draw the stations
     chatswood.draw(_app, &_f);
     st_leonards.draw(_app, &_f);
+    atarmon.draw(_app, &_f);
+    north_sydney.draw(_app, &_f);
 
 }
 
@@ -81,6 +83,13 @@ struct Station {
 
 //Implement method for drawing stations.
 impl Station {
+    pub fn new(coords: Point2, name: &str) -> Self {
+        Station {
+            coords: coords,
+            name: String::from(name)
+        }
+    }
+    
     pub fn draw(&self, _app: &App, _frame: &Frame) {
         let draw = _app.draw();
         
