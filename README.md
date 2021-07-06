@@ -1,6 +1,6 @@
 ### WORK IN PROGRESS
 # 🚄 Rail-net
-```rail-network``` is a program that creates and renders fictional rail maps. It does this by using random numbers and a sprinkle of math to create networks of stations and routes and then renders them onto your screen using ```(nannou)[https://github.com/nannou-org/nannou]```.
+```rail-network``` is a program that creates and renders fictional rail maps. It does this by using random numbers and a sprinkle of math to create networks of stations and routes and then renders them onto your screen using `[nannou](https://www.github.com/nannou-org/nannou/)`.
 
 
 ## Running the program
