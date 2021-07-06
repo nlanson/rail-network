@@ -36,18 +36,18 @@ use super::draw::Dir as Direction;
               intermediary point two.
     
  */
-pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2, Point2) {
+pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2, Point2) {
     //Equation of line connecting start and end points.
     let start: Point2 = sp.clone(); let end: Point2 = ep.clone();
-    let SPEPCONNECTION: Line = Line::new(start, end);
+    let SPEPCONNECTION: Seg = Seg::new(start, end);
 
     //Points that are one third of the direction between sp and ep starting at sp and ep respectively
-    let SP3: Point2 = SPEPCONNECTION.find_point_onethird(From::START);
-    let EP3: Point2 = SPEPCONNECTION.find_point_onethird(From::END);
+    let SP3: Point2 = SPEPCONNECTION.find_point_div(From::START, 3.0, 1);
+    let EP3: Point2 = SPEPCONNECTION.find_point_div(From::END, 3.0, 1);
 
     //Equation of the normal to the line SPEPCONNECTION at points SP3 and EP3
-    let SP3NORMAL: Equation = Equation::find_eq_slope_point(Equation::get_normal_grad(SPEPCONNECTION.find_eq_two_points().m), &SP3);
-    let EP3NORMAL: Equation = Equation::find_eq_slope_point(Equation::get_normal_grad(SPEPCONNECTION.find_eq_two_points().m), &EP3);
+    let SP3NORMAL: Equation = Equation::find_eq_point_gradient(&SP3, Equation::get_normal_grad(SPEPCONNECTION.eq.m));
+    let EP3NORMAL: Equation = Equation::find_eq_point_gradient(&EP3, Equation::get_normal_grad(SPEPCONNECTION.eq.m));
 
     //Initialise EPSTART, SPSTART and intermediary points #1 and #2.
     let SPSTART: Equation;
@@ -65,15 +65,15 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
             i2 = Equation::find_intersection_wVert(&EP3NORMAL, ep.x);
 
             //Get the distance from sp to i1 and ep to i2.
-            let i1_dist: f32 = Line::new(start, i1).get_distance();
-            let i2_dist: f32 = Line::new(end, i2).get_distance();
+            let i1_dist: f32 = Seg::new(start, i1).get_distance();
+            let i2_dist: f32 = Seg::new(end, i2).get_distance();
 
             //Use the shorter line as the first intermediary point
             if i1_dist < i2_dist {
-                let parallel_eq: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i1);
+                let parallel_eq: Equation = Equation::find_eq_point_gradient(&i1, SPEPCONNECTION.eq.m);
                 i2 = Equation::find_intersection(&parallel_eq, &EP3NORMAL);
             } else {
-                let parallel_eq: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i2);
+                let parallel_eq: Equation = Equation::find_eq_point_gradient(&i2, SPEPCONNECTION.eq.m);
                 i1 = Equation::find_intersection(&parallel_eq, &SP3NORMAL);
             }
         },
@@ -86,16 +86,16 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
             i2 = Equation::find_intersection(&EP3NORMAL, &EPSTART);
 
             //Get the distance from sp to i1 and ep to i2.
-            let i1_dist: f32 = Line::new(start, i1).get_distance();
-            let i2_dist: f32 = Line::new(end, i2).get_distance();
+            let i1_dist: f32 = Seg::new(start, i1).get_distance();
+            let i2_dist: f32 = Seg::new(end, i2).get_distance();
 
             
             //Uee the point with shorter distance to find the parallell line equation and subsequent second point distance.
             if i1_dist < i2_dist {
-                let parrallel_eq: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i1);
+                let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i1, SPEPCONNECTION.eq.m);
                 i2 = Equation::find_intersection(&parrallel_eq, &EP3NORMAL);
             } else {
-                let parrallel_eq: Equation = Equation::find_eq_slope_point(SPEPCONNECTION.find_eq_two_points().m, &i2);
+                let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i2, SPEPCONNECTION.eq.m);
                 i1 = Equation::find_intersection(&parrallel_eq, &SP3NORMAL);
             }
         }
@@ -110,7 +110,7 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: Direction) -> (Point2,
  * Equation Struct:
  * Stores the gradient and y-int of a linear line.
  */
-struct Equation {
+pub struct Equation {
     m: f32,
     b: f32
 }
@@ -144,7 +144,7 @@ impl Equation {
      * Equation is returned as a tuple (gradient, y-int) so it can
      * be used later in form y=mx+b
      */
-    pub fn find_eq_slope_point(m: f32, p: &Point2) -> Self {
+    pub fn find_eq_point_gradient(p: &Point2, m:f32) -> Self {
         let b: f32 = (p.y) + (m*-p.x);
         Self {
             m: m,
@@ -178,40 +178,51 @@ impl Equation {
 }
 
 /**
- * Line Struct:
- * Stores the start point and end point of the line.
+ * Segment Struct:
+ * Stores the start point and end point of a line and ithe line's equation.
  */
-struct Line {
-    start: Point2,
-    end: Point2
+pub struct Seg {
+    pub start: Point2,
+    pub end: Point2,
+    pub eq: Equation
 }
 
 //Enum for distinguishing directions of lines SPSTART and EPSTART.
-enum From {
+pub enum From {
     START,
     END
 }
 
-impl Line {
+impl Seg {
     pub fn new(sp: Point2, ep: Point2) -> Self {
-        return Line {
+        return Self {
             start: sp,
-            end: ep
+            end: ep,
+            eq: Equation::find_eq_two_points(&sp, &ep)
         }
     }
-    
-    /**
-     * Returns the Equation of the line connecting to two points.
-     */
-    pub fn find_eq_two_points(&self) -> Equation {
-        Equation::find_eq_two_points(&self.start, &self.end)
+
+    pub fn new_from_point_gradient(sp: Point2, slope: f32, dist: f32) -> Self {
+        let eq: Equation = Equation::find_eq_point_gradient(&sp, slope);
+        
+        //Find end point using distance and point
+        let angle: f32 = slope.atan();
+        let y_dist: f32 = dist * angle.sin();
+        let x_dist: f32 = dist*angle.cos();
+        let ep: Point2 = pt2(sp.x+x_dist, sp.y+y_dist);
+
+        Self {
+            start: sp,
+            end: ep,
+            eq: eq
+        }
     }
 
     /**
      * Takes in it self and a start point enum From and returns the point that is one third
      * of the distance from the selected start point to the end point.
      */
-    pub fn find_point_onethird(&self, from: From) -> Point2 {
+    pub fn find_point_div(&self, from: From, div: f32, n: u32) -> Point2 {
         let start: Point2;
         let end: Point2;
         match from {
@@ -227,8 +238,7 @@ impl Line {
 
         //Equation to find the point a third of the way between start and end from the start
         //Taken from https://www.dummies.com/education/math/trigonometry/how-to-divide-a-line-segment-into-multiple-parts/#:~:text=To%20find%20the%20point%20that's,results%20to%20get%20the%20coordinates.
-        let dc: f32 = 3.0; //Change this variable to configure how long the curve lines are.
-        pt2(start.x + (1.0/dc)*(end.x-start.x), start.y+(1.0/dc)*(end.y-start.y))
+        pt2(start.x + (n as f32/div)*(end.x-start.x), start.y+(n as f32/div)*(end.y-start.y))
     }
 
 

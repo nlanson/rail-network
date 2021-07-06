@@ -9,6 +9,7 @@
 use nannou::prelude::*;
 use palette::Srgb;
 use palette::named;
+use rand::Rng;
 
 //Internal Dependencies
 use super::maths;
@@ -27,6 +28,24 @@ pub fn fill_background(colour: &str, _app: &App, _frame: &Frame) {
 
     draw.background().color(get_colour(colour));
     draw.to_frame(_app, &_frame);
+}
+
+pub fn draw_circular_station(coords: Point2, _app: &App, _frame: &Frame) {
+    let draw = _app.draw();
+        
+        draw.ellipse()
+            .color(BLACK)
+            .w(30.0)
+            .h(30.0)
+            .x_y(coords.x, coords.y);
+        
+        draw.ellipse()
+            .color(WHITE)
+            .w(22.0)
+            .h(22.0)
+            .x_y(coords.x, coords.y);   
+        
+        draw.to_frame(_app, &_frame);
 }
 
 /*
@@ -51,7 +70,7 @@ pub fn straight_line(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame:
 /*
     Takes in a start point, end point, initial direction and colour to draw a curved line with.
 */
-pub fn curved_line(sp: &Point2, ep: &Point2, direction: Dir, colour: &str, _app: &App, _frame: &Frame) {
+pub fn curved_line(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _app: &App, _frame: &Frame) {
     let draw = _app.draw();
 
     let start_point: Point2 = sp.clone();
@@ -96,4 +115,24 @@ pub fn curved_line(sp: &Point2, ep: &Point2, direction: Dir, colour: &str, _app:
 
 fn get_colour(c: &str) -> Srgb<u8> {
     named::from_str(c).expect("red")
+}
+
+pub fn random_colour() -> String {
+    //List of nice looking colours to pick from
+    let colours: [&str; 10] = [
+        "coral",
+        "steelblue",
+        "limegreen",
+        "deepskyblue",
+        "lightseagreen",
+        "mediumpurple",
+        "mediumvioletred",
+        "orchid",
+        "gold",
+        "crimson"
+    ];
+    
+    let n: usize = rand::thread_rng().gen_range(0..colours.len());
+
+    String::from(colours[n])
 }
