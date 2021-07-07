@@ -10,13 +10,16 @@ use rand::Rng;
 
 //Internal Deps
 use super::station::Station as Station;
-use super::super::maths;
+use super::super::math;
+
+//Bindings
+use math::segment::Seg as Seg;
 
 
 pub struct StraightSection {
     station_count: u8,
     pub dist: f32,
-    pub segment: maths::Seg,
+    pub segment: Seg,
     pub stations: Vec<Station>
 }
 
@@ -40,7 +43,7 @@ impl StraightSection {
         let grad: f32 = rng.gen_range(-3.0..3.0);
 
         //Get the segment from point grad dist.
-        let seg: maths::Seg = maths::Seg::new_from_point_gradient(sp, grad, distance*station_count as f32);
+        let seg: Seg = Seg::new_from_point_gradient(sp, grad, distance*station_count as f32);
         
         //Loop over sattion_count and generate random stations.
         let mut stations: Vec<Station> = Vec::with_capacity(station_count as usize);
@@ -50,8 +53,8 @@ impl StraightSection {
         */
         for i in 0..station_count {
             //Get the segment coord here.
-            let segment: maths::Seg = maths::Seg::new(div_start, seg.end);
-            let st_coord: Point2 = segment.find_point_div(maths::From::START, station_count as f32, i as u32 +1 );
+            let segment: Seg = Seg::new(div_start, seg.end);
+            let st_coord: Point2 = segment.find_point_div(math::segment::From::START, station_count as f32, i as u32 +1 );
             println!("Station#{} -> {}", i, st_coord);
             
             //Add station to vec

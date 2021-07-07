@@ -12,7 +12,7 @@ use palette::named;
 use rand::Rng;
 
 //Internal Dependencies
-use super::maths;
+use super::math;
 
 //Enum for directions.
 pub enum Dir {
@@ -77,7 +77,7 @@ pub fn curved_line(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _app
     let end_point: Point2 = ep.clone();
 
     //Set the intermediary points (see notes in maths module)
-    let intermediaries: (Point2, Point2) = maths::find_intermediaries(&start_point, &end_point, direction);
+    let intermediaries: (Point2, Point2) = math::find_intermediaries(&start_point, &end_point, direction);
     let intermediary_1: Point2 = intermediaries.0;
     let intermediary_2: Point2 = intermediaries.1;
     

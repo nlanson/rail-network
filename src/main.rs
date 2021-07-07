@@ -7,7 +7,7 @@ use nannou::prelude::*;
 
 //Internal Dependencies
 mod draw;
-mod maths;
+mod math;
 mod map;
 
 //Bind internal dependancies
