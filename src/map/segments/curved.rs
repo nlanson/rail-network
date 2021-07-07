@@ -4,19 +4,21 @@
     Curved Segment Struct
 */
 
-//Internal Deps
-use super::station::Station;
-use super::super::draw::Dir as Direction;
+//Dependencies
+use crate::{
+    draw::Dir as Direction,
+    map::Station
+};
 
-pub struct CurvedSection {
+pub struct CurvedSeg {
     pub start_station: Station,
     pub end_station: Station,
     pub direction: Direction
 }
 
-impl CurvedSection {
+impl CurvedSeg {
     pub fn new(sp: Station, ep: Station, dir: Direction) -> Self {
-        CurvedSection {
+        CurvedSeg {
             start_station: sp,
             end_station: ep, 
             direction: dir

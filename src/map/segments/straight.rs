@@ -4,25 +4,25 @@
     Straight Segment Struct
 */
 
-//External Deps
-use nannou::prelude::*;
-use rand::Rng;
+//Dependencies
+use crate::{
+    math,
+    Rng,
+    Point2,
+    map::Station
+};
 
-//Internal Deps
-use super::station::{self, Station as Station};
-use super::super::math;
-
-//Bindings
+//Bind
 use math::segment::Seg as Seg;
 
-pub struct StraightSection {
+pub struct StraightSeg {
     station_count: u8,
     pub dist: f32,
     pub segment: Seg,
     pub stations: Vec<Station>
 }
 
-impl StraightSection {
+impl StraightSeg {
     pub fn rand_new(sp: Point2, isEnd: bool) -> Self {
         let mut rng = rand::thread_rng();
         
@@ -39,7 +39,7 @@ impl StraightSection {
         let stations: Vec<Station> = Self::create_station_vec(station_count, &seg, isEnd);
 
         //Return
-        StraightSection {
+        StraightSeg {
             station_count: station_count,
             segment: seg,
             dist: distance,

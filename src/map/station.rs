@@ -4,14 +4,16 @@
     Station Struct
 */
 
-//External Deps
+//Dependencies
 use std::io::{BufRead, BufReader};
 use std::fs::File;
-use nannou::prelude::*;
-use rand::Rng;
-
-//Internal Deps
-use super::super::draw;
+use crate::{
+    App,
+    Frame,
+    draw,
+    Rng,
+    Point2
+};
 
 //Struct for storing station data.
 pub struct Station {

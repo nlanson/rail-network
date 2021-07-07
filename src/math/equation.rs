@@ -4,11 +4,12 @@
     Stores the equation struct and relevant functions
 */
 
-//External Deps
-use nannou::{prelude::{Point2, pt2}, text::f32_pt_to_scale};
 
-//Internal Deps
-//None
+//Dependencies
+use crate::{
+    Point2,
+    pt2
+};
 
 
 pub struct Equation {

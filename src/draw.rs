@@ -6,13 +6,19 @@
 */
 
 //External Dependencies
-use nannou::prelude::*;
 use palette::Srgb;
 use palette::named;
-use rand::Rng;
+
 
 //Internal Dependencies
-use super::math;
+use crate::{
+    math,
+    Point2,
+    Rng,
+    App,
+    Frame,
+    BLACK, WHITE //The only constant colours used are imported from main.rs nannou::prelude::*;
+};
 
 //Enum for directions.
 pub enum Dir {

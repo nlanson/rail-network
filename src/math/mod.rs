@@ -5,19 +5,19 @@
  * 
  */
 
-//External Dependencies
-use nannou::prelude::{Point2, pt2};
-
-//Internal Dependencies
+//Dependencies
+use crate::{
+  Point2,
+  pt2,
+  draw::Dir as Direction
+};
 pub mod equation;
 pub mod segment;
-use super::draw::Dir;
 
-//Bindings
-use equation::Equation;
-use segment::Seg;
-use segment::From;
-use Dir as Direction;
+//Bind
+pub use equation::Equation as Equation;
+pub use segment::Seg as Seg;
+pub use segment::From as From;
 
 /**
  * Method to find the 2 intermediary points required for drawing a curved segment line in 

@@ -3,14 +3,15 @@
 #![allow(non_snake_case, dead_code)]
 
 //External Dependencies
-use nannou::prelude::*;
+pub use nannou::prelude::*;
+pub use rand::Rng;
 
 //Internal Dependencies
-mod draw;
-mod math;
-mod map;
+pub mod draw;
+pub mod math;
+pub mod map;
 
-//Bind internal dependancies
+//Bind
 use draw::Dir as Direction;
 use draw::curved_section as cl;
 use draw::straight_line as sl;
@@ -28,7 +29,7 @@ struct Model {
     
     //THE ARRAY LENGTH HERE IS SET TO ONE FOR TESTING PURPOSES
     //Meaning only one route needs to be generated.
-    map: [map::Route; 1] 
+    map: [map::route::Route; 1] 
 }
 
 //Sets the initial Model state.
@@ -40,7 +41,7 @@ fn model(_app: &App) -> Model {
             Map gen only returns an array with ONE ROUTE only
             for testing purposes
        */
-        map: [map::Route::new()]
+        map: [map::route::Route::new()]
     }
 }
 
@@ -100,17 +101,20 @@ fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
         for x in 0.._model.map[i].segs.len() {
             //match the segment type
             match &_model.map[i].segs[x] {
-                map::SegType::Straight(stl) => {
+                map::route::SegType::Straight(stl) => {
                     //Render straight segment
                     sl(&stl.segment.start, &stl.segment.end, &_model.map[i].colour, _app, &_f);
 
+                    //Draw every staion on the line
                     for s in 0..stl.stations.len() {
                         stl.stations[s].draw(_app, &_f);
                     }
                 },
-                map::SegType::Curve(crv) => {
+                map::route::SegType::Curve(crv) => {
                     //Render curve segment
                     cl(&crv.start_station.coords, &crv.end_station.coords, &crv.direction, &_model.map[i].colour, _app, &_f);
+                    
+                    //Draw stations on curve seg ends.
                     crv.start_station.draw(_app, &_f);
                     crv.end_station.draw(_app, &_f);
                 }

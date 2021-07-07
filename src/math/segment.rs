@@ -4,11 +4,14 @@
     Stores the Seg struct and relevent methods.
 */
 
-//External Deps
-use nannou::prelude::{Point2, pt2, Pow};
+//Dependencies
+use crate::{
+    Point2,
+    pt2,
+    Pow,
+    math::Equation
+};
 
-//Internal Deps
-use super::Equation as Equation;
 
 pub struct Seg {
     pub start: Point2,
