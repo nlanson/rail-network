@@ -24,8 +24,11 @@ pub enum SegType {
 
 
 pub struct Route {
+    //Vector of segments. Can be either Straight, Curved or Turn. The end of each segment will be connected to the start of the next segment.
     pub segs: Vec<SegType>,
+    //Line name
     pub name: String,
+    //Line colour
     pub colour: String
 }
 

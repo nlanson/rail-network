@@ -62,7 +62,7 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     draw_manual_example_stations(_app, &_f);
 
     //Function that draws from model state
-    //draw_from_model(_app, _model, &_f);
+    draw_from_model(_app, _model, &_f);
 
 }
 

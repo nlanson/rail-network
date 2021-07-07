@@ -1,4 +1,4 @@
-#![allow(non_snake_case)]
+#![allow(non_snake_case, dead_code)]
 /**
  * 
  * This is the Maths module that is used by the draw module.
@@ -6,7 +6,7 @@
  */
 
 //External Dependencies
-use nannou::prelude::Point2;
+use nannou::prelude::{Point2, pt2};
 
 //Internal Dependencies
 pub mod equation;
@@ -43,9 +43,6 @@ use Dir as Direction;
     
  */
 pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2, Point2) {
-  println!("-----");
-  println!("sp ={}, ep = {}", sp ,ep);  
-  
   //Equation of line connecting start and end points.
   let start: Point2 = sp.clone(); let end: Point2 = ep.clone();
   let SPEPCONNECTION: Seg = Seg::new(start, end);
@@ -109,9 +106,14 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2
           }
       }
     }
- 
-    println!("Intermediaries are {}, {}", i1, i2);
 
     //Return them
     (i1, i2)
+}
+
+//Find the one turning point for a turn section.
+//See Mini Metro turns for visual.
+pub fn find_turn_point(sp: &Point2, ep: &Point2, dir: &Direction) -> Point2 {
+  //TEMP
+  pt2(0.0, 0.0)
 }

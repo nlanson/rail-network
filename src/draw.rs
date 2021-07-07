@@ -1,4 +1,4 @@
-#![allow(non_snake_case)]
+#![allow(non_snake_case, dead_code)]
 /*
     This is the internal drawing module that 
     draws stuff for the program using
@@ -112,10 +112,24 @@ pub fn curved_section(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _
     draw.to_frame(_app, &_frame);
 }
 
-pub fn turn(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame: &Frame) {
+//Draw a turn with ONE mid point.
+pub fn turn(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _app: &App, _frame: &Frame) {
     let draw = _app.draw();
 
-    //Implement one intermediary turn here.
+    //Find the one turning point.
+    let tp: Point2 = math::find_turn_point(sp, ep, direction);
+
+    //Draw the lines.
+    draw.line()
+        .start(sp.clone())
+        .end(tp)
+        .weight(12.0)
+        .color(get_colour(colour));
+    draw.line()
+        .start(tp)
+        .end(ep.clone())
+        .weight(12.0)
+        .color(get_colour(colour));
 }
 
 

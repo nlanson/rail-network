@@ -36,12 +36,9 @@ impl StraightSection {
         
         //Random gradient 
         /*
-            Currently, the gradient is only set to be between -3 and 3.
-            For the map to look *nice*, it should be generating horizontal, vertical and mid points
-            of horizontal and vertical (eg 45 degrees or 135 degrees)
+            Need to implement vertical.
         */
         let grad: f32 = Self::new_grad();
-        println!("{}", grad);
 
         //Get the segment from point grad dist.
         let seg: Seg = Seg::new_from_point_gradient(sp, grad, distance*station_count as f32);
@@ -50,7 +47,7 @@ impl StraightSection {
         let mut stations: Vec<Station> = Vec::with_capacity(station_count as usize);
         let mut div_start: Point2 = sp;
         /*
-                NOT GETTING THE REQUIRED COORD FOR THE STATION
+                NOT GETTING THE REQUIRED COORD FOR THE STATIONS
         */
         for i in 0..station_count {
             //Get the segment coord here.
@@ -76,13 +73,13 @@ impl StraightSection {
 
     //Returns a new gradient out of the 8 possible nice angles
     fn new_grad() -> f32 {
-        let acceptable_angles: [u16; 8] = [
-            0, 45, 90, 135, 180, 225, 270, 315
+        let acceptable_angles: [u16; 3] = [
+            0, 45, 90, /*135, 180, 225, 270, 315*/
         ];
 
         let mut rng = rand::thread_rng();
 
         //Angle -> Grad = tan(angle);
-        (acceptable_angles[rng.gen_range(0..9)] as f32).tan()
+        (acceptable_angles[rng.gen_range(0..3)] as f32).tan()
     }
 }

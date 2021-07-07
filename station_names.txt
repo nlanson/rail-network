@@ -6,21 +6,21 @@ Asquith
 Auburn
 Banksia
 Bankstown
-Bardwell Park
+Bardwell_Park
 Beecroft
 Belmore
 Berala
 Berowra
-Beverly Hills
-Bexley North
+Beverly_Hills
+Bexley_North
 Birrong
 Blacktown
-Bondi Junction
+Bondi_Junction
 Burwood
 Cabramatta
 Campbelltown
 Campsie
-Canley Vale
+Canley_Vale
 Canterbury
 Caringbah
 Carlton
@@ -29,24 +29,24 @@ Casula
 Central
 Chatswood
 Cheltenham
-Chester Hill
-Circular Quay
+Chester_Hill
+Circular_Quay
 Clarendon
 Clyde
 Como
-Concord West
+Concord_West
 Cronulla
 Croydon
 Denistone
-Domestic Airport
+Domestic_Airport
 Doonside
-Dulwich Hill
-East Hills
-East Richmond
+Dulwich_Hill
+East_Hills
+East_Richmond
 Eastwood
 Edgecliff
-Edmonson Park
-Emu Plains
+Edmonson_Park
+Emu_Plains
 Engadine
 Epping
 Erskineville
@@ -55,22 +55,22 @@ Flemmington
 Glenfield
 Gordon
 Granville
-Green Square
+Green_Square
 Guildfor
 Gymea
-Harris Park
+Harris_Park
 Heathcote
 Helensburgh
 Holdworthy
 Homebush
 Hornsby
-Hurlstone Park
+Hurlstone_Park
 Hurstville
 Ingleburn
-International Airport
+International_Airport
 Jannali
 Killara
-Kings Cross
+Kings_Cross
 Kingsgrove
 Kingswood
 Kirrawee
@@ -86,66 +86,66 @@ Liverpool
 Loftus
 Macarthur
 Macdonaldtown
-Macquarie Fields
+Macquarie_Fields
 Marayong
 Marrickville
-Martin Place
+Martin_Place
 Mascot
 Meadowbank
 Merrylands
-Milsons Point
+Milsons_Point
 Minto
 Miranda
 Mortdale
-Mount Colah
-Mount Druitt
-Mount Kuring-gai
+Mount_Colah
+Mount_Druitt
+Mount_Kuring-gai
 Mulgrave
 Museum
 Narwee
 Newtown
 Normanhurst
-North Strathfield
-North Sydney
+North_Strathfield
+North_Sydney
 Oatley
-Olympic Park
+Olympic_Park
 Padstow
 Pannania
 Parramatta
-Pendle Hill
-Pennant Hills
+Pendle_Hill
+Pennant_Hills
 Penrith
 Penshurst
 Petersham
 Punchbowl
 Pymble
-Quakers Hill
+Quakers_Hill
 Redfern
-Regents Park
+Regents_Park
 Revesby
 Rhodes
 Richmond
 Riverstone
 Riverwood
 Rockdale
-Rooty Hill
+Rooty_Hill
 Roseville
 Schofields
 Sefton
-Seven Hills
-St James
-St Leonards
-St Marys
-St Peters
+Seven_Hills
+St_James
+St_Leonards
+St_Marys
+St_Peters
 Stanmore
 Strathfield
-Summer Hill
+Summer_Hill
 Sutherland
 Sydenham
 Tempe
 Thornleigh
 Toongabbie
-Town Hall
+Town_Hall
 Turramarra
 Turrella
 Villawood
@@ -153,16 +153,16 @@ Vineyard
 Wahroonga
 Waitara
 Warrawee
-Warwick Farm
+Warwick_Farm
 Waterfall
 Waverton
 Wentworthville
 Werrington
-West Ryde
+West_Ryde
 Westmead
-Wiley Park
+Wiley_Park
 Windsor
-Wolli Creek
+Wolli_Creek
 Wollstonecraft
 Woolooware
 Wynyard

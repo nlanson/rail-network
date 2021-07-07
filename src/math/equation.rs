@@ -94,9 +94,6 @@ impl Equation {
         let x: f32 = (b2-b1)/(m1-m2);
         let y: f32 = Self::solve(f1, x);
 
-        println!("f1 -> {}x+{}y+{}=0    |    f2 -> {}x+{}y+{}=0", f1.a, f1.b, f1.c, f2.a, f2.b, f2.c);
-        println!("Intersection is [{}, {}]", x, y);
-
         pt2(x, y)
     }
 
