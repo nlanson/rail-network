@@ -21,7 +21,7 @@ pub mod map;
 use draw::Dir as Direction;
 use draw::two_point_turn as cl;
 use draw::straight_line as sl;
-
+use map::route::SegType as SegmentType;
 
 fn main() {
     nannou::app(model)
@@ -107,7 +107,7 @@ fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
         for x in 0.._model.map[i].segs.len() {
             //match the segment type
             match &_model.map[i].segs[x] {
-                map::route::SegType::Straight(stl) => {
+                SegmentType::Straight(stl) => {
                     //Render straight segment
                     sl(&stl.segment.start, &stl.segment.end, &_model.map[i].colour, _app, &_f);
 
@@ -116,7 +116,7 @@ fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
                         stl.stations[s].draw(_app, &_f);
                     }
                 },
-                map::route::SegType::Curve(crv) => {
+                SegmentType::Curve(crv) => {
                     //Render curve segment
                     cl(&crv.start_station.coords, &crv.end_station.coords, &crv.direction, &_model.map[i].colour, _app, &_f);
                     
