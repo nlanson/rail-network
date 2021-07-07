@@ -12,13 +12,13 @@ use rand::Rng;
 
 //Internal Dependencies
 use super::draw;
-pub mod straightseg;
-pub mod curvedseg;
+pub mod straight_seg;
+pub mod curved_seg;
 pub mod station;
 
 pub enum SegType {
-    Curve(curvedseg::CurvedSection),
-    Straight(straightseg::StraightSection)
+    Curve(curved_seg::CurvedSection),
+    Straight(straight_seg::StraightSection)
 }
 
 
@@ -47,7 +47,7 @@ impl Route {
         let c: String = draw::random_colour(); //Random colour from Srgb palette.
 
         //Here, a straight segment is manually being added to s for testing purposes.
-        s.push(SegType::Straight(straightseg::StraightSection::rand_new(pt2(0.0,0.0))));
+        s.push(SegType::Straight(straight_seg::StraightSection::rand_new(pt2(0.0,0.0))));
         
         
         Self {

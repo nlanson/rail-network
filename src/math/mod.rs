@@ -43,69 +43,74 @@ use Dir as Direction;
     
  */
 pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2, Point2) {
-    //Equation of line connecting start and end points.
-    let start: Point2 = sp.clone(); let end: Point2 = ep.clone();
-    let SPEPCONNECTION: Seg = Seg::new(start, end);
+  println!("-----");
+  println!("sp ={}, ep = {}", sp ,ep);  
+  
+  //Equation of line connecting start and end points.
+  let start: Point2 = sp.clone(); let end: Point2 = ep.clone();
+  let SPEPCONNECTION: Seg = Seg::new(start, end);
 
-    //Points that are one third of the direction between sp and ep starting at sp and ep respectively
-    let SP3: Point2 = SPEPCONNECTION.find_point_div(From::START, 3.0, 1);
-    let EP3: Point2 = SPEPCONNECTION.find_point_div(From::END, 3.0, 1);
+  //Points that are one third of the direction between sp and ep starting at sp and ep respectively
+  let SP3: Point2 = SPEPCONNECTION.find_point_div(From::START, 3.0, 1);
+  let EP3: Point2 = SPEPCONNECTION.find_point_div(From::END, 3.0, 1);
 
-    //Equation of the normal to the line SPEPCONNECTION at points SP3 and EP3
-    let SP3NORMAL: Equation = Equation::find_eq_point_gradient(&SP3, Equation::get_normal_grad(SPEPCONNECTION.eq.m));
-    let EP3NORMAL: Equation = Equation::find_eq_point_gradient(&EP3, Equation::get_normal_grad(SPEPCONNECTION.eq.m));
+  //Equation of the normal to the line SPEPCONNECTION at points SP3 and EP3
+  let SP3NORMAL: Equation = Equation::find_eq_point_gradient(&SP3, Equation::get_normal_grad(SPEPCONNECTION.eq.get_grad()));
+  let EP3NORMAL: Equation = Equation::find_eq_point_gradient(&EP3, Equation::get_normal_grad(SPEPCONNECTION.eq.get_grad()));
 
-    //Initialise EPSTART, SPSTART and intermediary points #1 and #2.
-    let SPSTART: Equation;
-    let EPSTART: Equation;
-    let mut i1: Point2; let mut i2: Point2;
+  //Initialise EPSTART, SPSTART and intermediary points #1 and #2.
+  let SPSTART: Equation;
+  let EPSTART: Equation;
+  let mut i1: Point2; let mut i2: Point2;
 
-    //Find them
-    match dir {
-        Direction::X => {
-            //Equation for horizontal line starting at the start point.
-            SPSTART = Equation { m: 0.0, b: sp.y };
+  //Find them
+  match dir {
+      Direction::X => {
+          //Equation for horizontal line starting at the start point.
+          SPSTART = Equation::find_eq_point_gradient(sp, 0.0);
 
-            //Find candidates for intermediary points
-            i1 = Equation::find_intersection(&SP3NORMAL, &SPSTART);
-            i2 = Equation::find_intersection_wVert(&EP3NORMAL, ep.x);
+          //Find candidates for intermediary points
+          i1 = Equation::find_intersection(&SP3NORMAL, &SPSTART);
+          i2 = Equation::find_intersection_wVert(&EP3NORMAL, ep.x);
 
-            //Get the distance from sp to i1 and ep to i2.
-            let i1_dist: f32 = Seg::new(start, i1).get_distance();
-            let i2_dist: f32 = Seg::new(end, i2).get_distance();
+          //Get the distance from sp to i1 and ep to i2.
+          let i1_dist: f32 = Seg::new(start, i1).get_distance();
+          let i2_dist: f32 = Seg::new(end, i2).get_distance();
 
-            //Use the shorter line as the first intermediary point
-            if i1_dist < i2_dist {
-                let parallel_eq: Equation = Equation::find_eq_point_gradient(&i1, SPEPCONNECTION.eq.m);
-                i2 = Equation::find_intersection(&parallel_eq, &EP3NORMAL);
-            } else {
-                let parallel_eq: Equation = Equation::find_eq_point_gradient(&i2, SPEPCONNECTION.eq.m);
-                i1 = Equation::find_intersection(&parallel_eq, &SP3NORMAL);
-            }
-        },
-        Direction::Y => {
-            //Equation for horizontal line at the end
-            EPSTART = Equation{ m: 0.0, b: ep.y };
+          //Use the shorter line as the first intermediary point
+          if i1_dist < i2_dist {
+              let parallel_eq: Equation = Equation::find_eq_point_gradient(&i1, SPEPCONNECTION.eq.get_grad());
+              i2 = Equation::find_intersection(&parallel_eq, &EP3NORMAL);
+          } else {
+              let parallel_eq: Equation = Equation::find_eq_point_gradient(&i2, SPEPCONNECTION.eq.get_grad());
+              i1 = Equation::find_intersection(&parallel_eq, &SP3NORMAL);
+          }
+      },
+      Direction::Y => {
+          //Equation for horizontal line at the end
+          EPSTART = Equation::find_eq_point_gradient(ep, 0.0);
 
-            //Find candidates for the first intermediary point.
-            i1 = Equation::find_intersection_wVert(&SP3NORMAL, sp.x);
-            i2 = Equation::find_intersection(&EP3NORMAL, &EPSTART);
+          //Find candidates for the first intermediary point.
+          i1 = Equation::find_intersection_wVert(&SP3NORMAL, sp.x);
+          i2 = Equation::find_intersection(&EP3NORMAL, &EPSTART);
 
-            //Get the distance from sp to i1 and ep to i2.
-            let i1_dist: f32 = Seg::new(start, i1).get_distance();
-            let i2_dist: f32 = Seg::new(end, i2).get_distance();
+          //Get the distance from sp to i1 and ep to i2.
+          let i1_dist: f32 = Seg::new(start, i1).get_distance();
+          let i2_dist: f32 = Seg::new(end, i2).get_distance();
 
-            
-            //Uee the point with shorter distance to find the parallell line equation and subsequent second point distance.
-            if i1_dist < i2_dist {
-                let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i1, SPEPCONNECTION.eq.m);
-                i2 = Equation::find_intersection(&parrallel_eq, &EP3NORMAL);
-            } else {
-                let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i2, SPEPCONNECTION.eq.m);
-                i1 = Equation::find_intersection(&parrallel_eq, &SP3NORMAL);
-            }
-        }
+          
+          //Uee the point with shorter distance to find the parallell line equation and subsequent second point distance.
+          if i1_dist < i2_dist {
+              let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i1, SPEPCONNECTION.eq.get_grad());
+              i2 = Equation::find_intersection(&parrallel_eq, &EP3NORMAL);
+          } else {
+              let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i2, SPEPCONNECTION.eq.get_grad());
+              i1 = Equation::find_intersection(&parrallel_eq, &SP3NORMAL);
+          }
+      }
     }
+ 
+    println!("Intermediaries are {}, {}", i1, i2);
 
     //Return them
     (i1, i2)

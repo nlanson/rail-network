@@ -70,7 +70,7 @@ pub fn straight_line(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame:
 /*
     Takes in a start point, end point, initial direction and colour to draw a curved line with.
 */
-pub fn curved_line(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _app: &App, _frame: &Frame) {
+pub fn curved_section(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _app: &App, _frame: &Frame) {
     let draw = _app.draw();
 
     let start_point: Point2 = sp.clone();
@@ -110,6 +110,12 @@ pub fn curved_line(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _app
     
     //Draw on frame
     draw.to_frame(_app, &_frame);
+}
+
+pub fn turn(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame: &Frame) {
+    let draw = _app.draw();
+
+    //Implement one intermediary turn here.
 }
 
 

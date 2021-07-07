@@ -12,7 +12,7 @@ mod map;
 
 //Bind internal dependancies
 use draw::Dir as Direction;
-use draw::curved_line as cl;
+use draw::curved_section as cl;
 use draw::straight_line as sl;
 
 
@@ -61,28 +61,8 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     //Function that draws routes manually
     draw_manual_example_stations(_app, &_f);
 
-    //Example that reads the model and draws segments in each route:
-    //For each route
-    for i in 0.._model.map.len() {
-        //For each segment
-        for x in 0.._model.map[i].segs.len() {
-            //match the segment type
-            match &_model.map[i].segs[x] {
-                map::SegType::Straight(stl) => {
-                    //Render straight segment
-                    sl(&stl.segment.start, &stl.segment.end, &_model.map[i].colour, _app, &_f);
-
-                    for s in 0..stl.stations.len() {
-                        stl.stations[s].draw(_app, &_f);
-                    }
-                },
-                map::SegType::Curve(crv) => {
-                    //Render curve segment
-                    cl(&crv.start_station.coords, &crv.end_station.coords, &crv.direction, &_model.map[i].colour, _app, &_f);
-                }
-            }
-        }
-    }
+    //Function that draws from model state
+    //draw_from_model(_app, _model, &_f);
 
 }
 
@@ -108,4 +88,28 @@ fn draw_manual_example_stations(_app: &App, _f: &Frame) {
     st_leonards.draw(_app, _f);
     atarmon.draw(_app, _f);
     north_sydney.draw(_app, _f);
+}
+
+fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
+    //For each route
+    for i in 0.._model.map.len() {
+        //For each segment
+        for x in 0.._model.map[i].segs.len() {
+            //match the segment type
+            match &_model.map[i].segs[x] {
+                map::SegType::Straight(stl) => {
+                    //Render straight segment
+                    sl(&stl.segment.start, &stl.segment.end, &_model.map[i].colour, _app, &_f);
+
+                    for s in 0..stl.stations.len() {
+                        stl.stations[s].draw(_app, &_f);
+                    }
+                },
+                map::SegType::Curve(crv) => {
+                    //Render curve segment
+                    cl(&crv.start_station.coords, &crv.end_station.coords, &crv.direction, &_model.map[i].colour, _app, &_f);
+                }
+            }
+        }
+    }
 }
