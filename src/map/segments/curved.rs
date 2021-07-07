@@ -2,6 +2,9 @@
 #![allow(dead_code)]
 /*
     Curved Segment Struct
+
+    Not much implemented yet.
+    Cant decide what needs to go in unless Route generation algo is made.
 */
 
 //Dependencies

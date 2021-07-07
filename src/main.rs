@@ -1,6 +1,12 @@
 //Inspiration: https://editor.p5js.org/generative-design/sketches/P_3_1_2_02
-
 #![allow(non_snake_case, dead_code)]
+
+/*
+    Main module that initialises the App, creates Model and updates Model.
+
+    TODO:
+     - Change/optimise Model and function to draw routes from model.
+*/
 
 //External Dependencies
 pub use nannou::prelude::*;
@@ -13,7 +19,7 @@ pub mod map;
 
 //Bind
 use draw::Dir as Direction;
-use draw::curved_section as cl;
+use draw::two_point_turn as cl;
 use draw::straight_line as sl;
 
 

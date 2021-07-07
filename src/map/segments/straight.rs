@@ -2,6 +2,12 @@
 #![allow(dead_code)]
 /*
     Straight Segment Struct
+
+    Placeholder code implemented.
+    Bound to change upon implementaion of Route gen algo.
+
+    TODO:
+     - Implement vertical straight segments.
 */
 
 //Dependencies

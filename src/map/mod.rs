@@ -1,9 +1,9 @@
 #![allow(non_snake_case)]
 /*
     Root of the map module.
-    See src/map/station.rs for Station struct
-    See src/map/straightseg.rs for StraightSegment struct
-    See src/map/curvedseg.rs for CurvedSegment struct
+    
+    TODO:
+     - Implement map generation using route struct for multiple routes.
 */
 
 //Dependencies

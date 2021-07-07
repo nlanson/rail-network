@@ -1,8 +1,16 @@
 #![allow(non_snake_case, dead_code)]
 /*
     This is the internal drawing module that 
-    draws stuff for the program using
-    Nannou functions
+    draws stuff for the program using Nannou 
+    functions.
+
+    TODO:
+     - One point turns using prescribe gradient.
+     - Draw train lines that run paralell between the same station.
+     - Draw the end of a route.
+     - Legend and Key.
+     - Station names.
+     - Water bodies and geography (eventually).
 */
 
 //External Dependencies
@@ -76,7 +84,7 @@ pub fn straight_line(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame:
 /*
     Takes in a start point, end point, initial direction and colour to draw a curved line with.
 */
-pub fn curved_section(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _app: &App, _frame: &Frame) {
+pub fn two_point_turn(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _app: &App, _frame: &Frame) {
     let draw = _app.draw();
 
     let start_point: Point2 = sp.clone();
