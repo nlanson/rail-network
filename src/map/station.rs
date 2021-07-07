@@ -39,7 +39,7 @@ impl Station {
         
         Station {
             coords: coords,
-            name: names[rand::thread_rng().gen_range(0..names.len()+1)].clone()
+            name: names[rand::thread_rng().gen_range(0..names.len())].clone()
         }
     }
     

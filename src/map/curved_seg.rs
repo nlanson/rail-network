@@ -13,3 +13,13 @@ pub struct CurvedSection {
     pub end_station: Station,
     pub direction: Direction
 }
+
+impl CurvedSection {
+    pub fn new(sp: Station, ep: Station, dir: Direction) -> Self {
+        CurvedSection {
+            start_station: sp,
+            end_station: ep, 
+            direction: dir
+        }
+    }
+}

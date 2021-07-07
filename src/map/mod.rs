@@ -10,11 +10,17 @@
 use nannou::prelude::pt2;
 use rand::Rng;
 
+use crate::map::{station::Station, straight_seg::StraightSection, curved_seg::CurvedSection};
+
 //Internal Dependencies
 use super::draw;
+use super::math;
 pub mod straight_seg;
 pub mod curved_seg;
 pub mod station;
+
+//Bindings
+use math::segment::Seg as Segment;
 
 pub enum SegType {
     Curve(curved_seg::CurvedSection),
@@ -45,18 +51,56 @@ impl Route {
     */
     pub fn new() -> Self {
         //Return a new Route
-        let mut s: Vec<SegType> = vec!(); //Create new vector to store segments.
-        let n: String = String::from("T") + &(rand::thread_rng().gen_range(0..9) as u8).to_string(); //Random route name.
-        let c: String = draw::random_colour(); //Random colour from Srgb palette.
+        let mut route_segs: Vec<SegType> = vec!();
+        let route_name: String = String::from("T") + &(rand::thread_rng().gen_range(0..9) as u8).to_string();
+        let route_colour: String = draw::random_colour();
 
-        //Here, a straight segment is manually being added to s for testing purposes.
-        s.push(SegType::Straight(straight_seg::StraightSection::rand_new(pt2(0.0,0.0))));
+        /*
+            BUNCH OF SEGMENTS MANUALLY ADDED FOR TESTING PURPOSES.
+        */
+        route_segs.push(SegType::Curve(CurvedSection::new(
+            Station::new_with_random_name(pt2(0.0, -400.0)),
+            Station::new_with_random_name(pt2(-200.0, -300.0)),
+            draw::Dir::X
+        )));
+
+        route_segs.push(SegType::Straight(StraightSection::defined_new(
+            3,
+            pt2(-200.0, -300.0),
+            pt2(-200.0, 300.0),
+            false
+        )));
+
+        route_segs.push(SegType::Curve(CurvedSection::new(
+            Station::new_with_random_name(pt2(-200.0, 300.0)),
+            Station::new_with_random_name(pt2(0.0, 400.0)),
+            draw::Dir::Y
+        )));
+
+        route_segs.push(SegType::Curve(CurvedSection::new(
+            Station::new_with_random_name(pt2(0.0, 400.0)),
+            Station::new_with_random_name(pt2(200.0, 300.0)),
+            draw::Dir::X
+        )));
+
+        route_segs.push(SegType::Straight(StraightSection::defined_new(
+            3,
+            pt2(200.0, 300.0),
+            pt2(200.0, -300.0),
+            false
+        )));
+
+        route_segs.push(SegType::Curve(CurvedSection::new(
+            Station::new_with_random_name(pt2(200.0, -300.0)),
+            Station::new_with_random_name(pt2(0.0, -400.0)),
+            draw::Dir::Y
+        )));
         
         
         Self {
-            segs: s,
-            name: n,
-            colour:c
+            segs: route_segs,
+            name: route_name,
+            colour: route_colour
         }
     }
 }

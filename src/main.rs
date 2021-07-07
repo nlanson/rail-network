@@ -1,6 +1,6 @@
 //Inspiration: https://editor.p5js.org/generative-design/sketches/P_3_1_2_02
 
-#![allow(non_snake_case)]
+#![allow(non_snake_case, dead_code)]
 
 //External Dependencies
 use nannou::prelude::*;
@@ -25,7 +25,9 @@ fn main() {
 //Nannou application state.
 struct Model {
     _window: window::Id,
+    
     //THE ARRAY LENGTH HERE IS SET TO ONE FOR TESTING PURPOSES
+    //Meaning only one route needs to be generated.
     map: [map::Route; 1] 
 }
 
@@ -33,6 +35,7 @@ struct Model {
 fn model(_app: &App) -> Model {
     Model {
         _window: _app.new_window().size(1440, 1000).view(view).build().unwrap(),
+       
        /*
             Map gen only returns an array with ONE ROUTE only
             for testing purposes
@@ -59,7 +62,7 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     draw::fill_background("beige", _app, &_f);
     
     //Function that draws routes manually
-    draw_manual_example_stations(_app, &_f);
+    //draw_manual_example_stations(_app, &_f);
 
     //Function that draws from model state
     draw_from_model(_app, _model, &_f);
@@ -108,6 +111,8 @@ fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
                 map::SegType::Curve(crv) => {
                     //Render curve segment
                     cl(&crv.start_station.coords, &crv.end_station.coords, &crv.direction, &_model.map[i].colour, _app, &_f);
+                    crv.start_station.draw(_app, &_f);
+                    crv.end_station.draw(_app, &_f);
                 }
             }
         }
