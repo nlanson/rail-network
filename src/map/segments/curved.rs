@@ -21,7 +21,7 @@ pub struct CurvedSeg {
 
 impl CurvedSeg {
     pub fn new(sp: Station, ep: Station, dir: Direction) -> Self {
-        CurvedSeg {
+        Self {
             start_station: sp,
             end_station: ep, 
             direction: dir

@@ -113,7 +113,10 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2
 
 //Find the one turning point for a turn section.
 //See Mini Metro turns for visual.
-pub fn find_turn_point(sp: &Point2, ep: &Point2, dir: &Direction) -> Point2 {
+pub fn find_turn_point(sp: &Point2, ep: &Point2) -> Point2 {
+  
+  
+  
   //TEMP
   pt2(0.0, 0.0)
 }

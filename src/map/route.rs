@@ -54,7 +54,7 @@ impl Route {
         //Return a new Route
         let mut route_segs: Vec<SegType> = vec!();
         let route_name: String = String::from("T") + &(rand::thread_rng().gen_range(0..9) as u8).to_string();
-        let route_colour: String = draw::random_colour();
+        let route_colour: String = draw::util::random_colour();
 
         /*
             BUNCH OF SEGMENTS MANUALLY ADDED FOR TESTING PURPOSES.

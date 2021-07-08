@@ -47,6 +47,6 @@ impl Station {
     
     //Draw the station
     pub fn draw(&self, _app: &App, _f: &Frame) {
-        draw::draw_circular_station(self.coords, _app, _f);
+        draw::util::draw_circular_station(self.coords, _app, _f);
     }
 }

@@ -11,6 +11,8 @@
 //External Dependencies
 pub use nannou::prelude::*;
 pub use rand::Rng;
+use palette::Srgb;
+use palette::named;
 
 //Internal Dependencies
 pub mod draw;
@@ -19,8 +21,8 @@ pub mod map;
 
 //Bind
 use draw::Dir as Direction;
-use draw::two_point_turn as cl;
-use draw::straight_line as sl;
+use draw::lines::two_point_turn as cl;
+use draw::lines::straight_line as sl;
 use map::route::SegType as SegmentType;
 
 fn main() {
@@ -66,7 +68,7 @@ fn update(_app: &App, _model: &mut Model, _update: Update) {
  */
 fn view(_app: &App, _model: &Model, _f: Frame) {
     //Fill in the background as beige.
-    draw::fill_background("beige", _app, &_f);
+    draw::util::fill_background("beige", _app, &_f);
     
     //Function that draws routes manually
     //draw_manual_example_stations(_app, &_f);
@@ -100,6 +102,8 @@ fn draw_manual_example_stations(_app: &App, _f: &Frame) {
     north_sydney.draw(_app, _f);
 }
 
+//This method is not finalised as I am yet to think of the algorithm to generate random maps
+//However, as of now it draws each segment in each route.
 fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
     //For each route
     for i in 0.._model.map.len() {
