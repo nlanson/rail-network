@@ -36,7 +36,7 @@ impl StraightSeg {
         //Init vars
         let station_count: u8 = rng.gen_range(2..7);
         let distance: f32 = rng.gen_range(100..201) as f32;
-        let grad: f32 = Self::new_grad(); //Need to implement vertical gradients.
+        let grad: Option<f32> = Self::new_grad(); //Can only go in positive direction atm.
 
         //Get the segment for the straight section
         let seg: Seg = Seg::new_from_point_gradient(sp, grad, distance*station_count as f32);
@@ -67,15 +67,15 @@ impl StraightSeg {
     }
 
     //Returns a new gradient out of the 8 possible nice angles
-    fn new_grad() -> f32 {
-        let acceptable_angles: [u16; 3] = [
-            0, 45, 90, /*135, 180, 225, 270, 315*/
+    fn new_grad() -> Option<f32> {
+        let acceptable_slopes: [Option<f32>; 4] = [
+            Some(0.0), Some(1.0), Some(-1.0), None
         ];
 
         let mut rng = rand::thread_rng();
 
         //Angle -> Grad = tan(angle);
-        (acceptable_angles[rng.gen_range(0..3)] as f32).tan()
+        acceptable_slopes[rng.gen_range(0..4)]
     }
 
     fn create_station_vec(station_count: u8, seg: &Seg, isEnd: bool) -> Vec<Station> {

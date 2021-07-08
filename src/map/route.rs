@@ -31,6 +31,7 @@ pub enum SegType {
     Straight(StraightSeg)
 }
 
+//A route is the collection of segments.
 pub struct Route {
     //Vector of segments. Can be either Straight, Curved or Turn. The end of each segment will be connected to the start of the next segment.
     pub segs: Vec<SegType>,
@@ -56,46 +57,51 @@ impl Route {
         let route_name: String = String::from("T") + &(rand::thread_rng().gen_range(0..9) as u8).to_string();
         let route_colour: String = draw::util::random_colour();
 
+        //Adds new randomly generated straight segment to the route.
+        route_segs.push(SegType::Straight(
+            StraightSeg::rand_new(pt2(-500.0, 0.0), true)
+        ));
+
         /*
             BUNCH OF SEGMENTS MANUALLY ADDED FOR TESTING PURPOSES.
         */
-        route_segs.push(SegType::Curve(CurvedSeg::new(
-            Station::new_with_random_name(pt2(0.0, -400.0)),
-            Station::new_with_random_name(pt2(-200.0, -300.0)),
-            draw::Dir::X
-        )));
+        // route_segs.push(SegType::Curve(CurvedSeg::new(
+        //     Station::new_with_random_name(pt2(0.0, -400.0)),
+        //     Station::new_with_random_name(pt2(-200.0, -300.0)),
+        //     draw::Dir::X
+        // )));
 
-        route_segs.push(SegType::Straight(StraightSeg::defined_new(
-            3,
-            pt2(-200.0, -300.0),
-            pt2(-200.0, 300.0),
-            false
-        )));
+        // route_segs.push(SegType::Straight(StraightSeg::defined_new(
+        //     3,
+        //     pt2(-200.0, -300.0),
+        //     pt2(-200.0, 300.0),
+        //     false
+        // )));
 
-        route_segs.push(SegType::Curve(CurvedSeg::new(
-            Station::new_with_random_name(pt2(-200.0, 300.0)),
-            Station::new_with_random_name(pt2(0.0, 400.0)),
-            draw::Dir::Y
-        )));
+        // route_segs.push(SegType::Curve(CurvedSeg::new(
+        //     Station::new_with_random_name(pt2(-200.0, 300.0)),
+        //     Station::new_with_random_name(pt2(0.0, 400.0)),
+        //     draw::Dir::Y
+        // )));
 
-        route_segs.push(SegType::Curve(CurvedSeg::new(
-            Station::new_with_random_name(pt2(0.0, 400.0)),
-            Station::new_with_random_name(pt2(200.0, 300.0)),
-            draw::Dir::X
-        )));
+        // route_segs.push(SegType::Curve(CurvedSeg::new(
+        //     Station::new_with_random_name(pt2(0.0, 400.0)),
+        //     Station::new_with_random_name(pt2(200.0, 300.0)),
+        //     draw::Dir::X
+        // )));
 
-        route_segs.push(SegType::Straight(StraightSeg::defined_new(
-            3,
-            pt2(200.0, 300.0),
-            pt2(200.0, -300.0),
-            false
-        )));
+        // route_segs.push(SegType::Straight(StraightSeg::defined_new(
+        //     3,
+        //     pt2(200.0, 300.0),
+        //     pt2(200.0, -300.0),
+        //     false
+        // )));
 
-        route_segs.push(SegType::Curve(CurvedSeg::new(
-            Station::new_with_random_name(pt2(200.0, -300.0)),
-            Station::new_with_random_name(pt2(0.0, -400.0)),
-            draw::Dir::Y
-        )));
+        // route_segs.push(SegType::Curve(CurvedSeg::new(
+        //     Station::new_with_random_name(pt2(200.0, -300.0)),
+        //     Station::new_with_random_name(pt2(0.0, -400.0)),
+        //     draw::Dir::Y
+        // )));
         
         
         Self {

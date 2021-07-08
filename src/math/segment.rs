@@ -34,20 +34,36 @@ impl Seg {
         }
     }
 
-    pub fn new_from_point_gradient(sp: Point2, slope: f32, dist: f32) -> Self {
-        let eq: Equation = Equation::find_eq_point_gradient(&sp, slope);
+    pub fn new_from_point_gradient(sp: Point2, slope: Option<f32>, dist: f32) -> Self {
+        match slope {
+            Some(m) => {
+                let eq: Equation = Equation::find_eq_point_gradient(&sp, Some(m));
         
-        //Find end point using distance and point
-        let angle: f32 = slope.atan();
-        let y_dist: f32 = dist * angle.sin();
-        let x_dist: f32 = dist*angle.cos();
-        let ep: Point2 = pt2(sp.x+x_dist, sp.y+y_dist);
-
-        Self {
-            start: sp,
-            end: ep,
-            eq: eq
+                //Find end point using distance and point
+                let angle: f32 = m.atan();
+                let y_dist: f32 = dist * angle.sin();
+                let x_dist: f32 = dist*angle.cos();
+                let ep: Point2 = pt2(sp.x+x_dist, sp.y+y_dist);
+        
+                Self {
+                    start: sp,
+                    end: ep,
+                    eq: eq
+                }
+            },
+            None => {
+                let ep: Point2 = pt2(sp.x, sp.y+dist);
+                let eq: Equation = Equation::find_eq_two_points(&sp, &ep);
+                
+                Self {
+                    start: sp,
+                    end: ep,
+                    eq: eq
+                }
+            }
         }
+        
+        
     }
 
     /**

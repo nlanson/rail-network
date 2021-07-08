@@ -28,6 +28,8 @@ impl Equation {
 
     //Returns gradient of general form equation
     pub fn get_grad(&self) -> f32 {
+        
+        
         -(self.a/self.b)
     }
 
@@ -40,6 +42,16 @@ impl Equation {
         let x1 = p1.x;
         let x2 = p2.x;
 
+        //If vertical
+        if x2-x1 == 0.0 {
+            let a: f32 = 1.0;
+            let b: f32 = 0.0;
+            let c: f32 = -p1.x;
+            return Self {
+                a, b, c
+            };
+        }
+
         let m: f32 = (y2-y1)/(x2-x1);
         let yint: f32 = -(m*x1) + y1;
 
@@ -49,7 +61,7 @@ impl Equation {
         
         //Return equation
         Self {
-            a,b,c 
+            a, b, c 
         }
     }
     
@@ -58,17 +70,32 @@ impl Equation {
      * Equation is returned as a tuple (gradient, y-int) so it can
      * be used later in form y=mx+b
      */
-    pub fn find_eq_point_gradient(p: &Point2, m:f32) -> Self {
+    pub fn find_eq_point_gradient(p: &Point2, m:Option<f32>) -> Self {
         //y=mx+c -> -mx+y-c=0
 
-        let b: f32 = 1.0;
-        let c: f32 = (p.y) + (m*-p.x);
-        
-        Self {
-            a: -m,
-            b: b,
-            c: -c 
+        match m {
+            //If there is a gradient
+            Some(x) => {
+                let b: f32 = 1.0;
+                let c: f32 = (p.y) + (x*-p.x);
+                
+                Self {
+                    a: -x,
+                    b: b,
+                    c: -c 
+                }
+            },
+            //If the slope is vertical
+            None => {
+                Self {
+                    a: 1.0,
+                    b: 0.0,
+                    c: -p.x
+                }
+            }
         }
+
+        
     }
 
     /**

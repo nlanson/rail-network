@@ -8,7 +8,6 @@
 //Dependencies
 use crate::{
   Point2,
-  pt2,
   draw::Dir as Direction
 };
 pub mod equation;
@@ -52,8 +51,8 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2
   let EP3: Point2 = SPEPCONNECTION.find_point_div(From::END, 3.0, 1);
 
   //Equation of the normal to the line SPEPCONNECTION at points SP3 and EP3
-  let SP3NORMAL: Equation = Equation::find_eq_point_gradient(&SP3, Equation::get_normal_grad(SPEPCONNECTION.eq.get_grad()));
-  let EP3NORMAL: Equation = Equation::find_eq_point_gradient(&EP3, Equation::get_normal_grad(SPEPCONNECTION.eq.get_grad()));
+  let SP3NORMAL: Equation = Equation::find_eq_point_gradient(&SP3, Some(Equation::get_normal_grad(SPEPCONNECTION.eq.get_grad())));
+  let EP3NORMAL: Equation = Equation::find_eq_point_gradient(&EP3, Some(Equation::get_normal_grad(SPEPCONNECTION.eq.get_grad())));
 
   //Initialise EPSTART, SPSTART and intermediary points #1 and #2.
   let SPSTART: Equation;
@@ -64,7 +63,7 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2
   match dir {
       Direction::X => {
           //Equation for horizontal line starting at the start point.
-          SPSTART = Equation::find_eq_point_gradient(sp, 0.0);
+          SPSTART = Equation::find_eq_point_gradient(sp, Some(0.0));
 
           //Find candidates for intermediary points
           i1 = Equation::find_intersection(&SP3NORMAL, &SPSTART);
@@ -76,16 +75,16 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2
 
           //Use the shorter line as the first intermediary point
           if i1_dist < i2_dist {
-              let parallel_eq: Equation = Equation::find_eq_point_gradient(&i1, SPEPCONNECTION.eq.get_grad());
+              let parallel_eq: Equation = Equation::find_eq_point_gradient(&i1, Some(SPEPCONNECTION.eq.get_grad()));
               i2 = Equation::find_intersection(&parallel_eq, &EP3NORMAL);
           } else {
-              let parallel_eq: Equation = Equation::find_eq_point_gradient(&i2, SPEPCONNECTION.eq.get_grad());
+              let parallel_eq: Equation = Equation::find_eq_point_gradient(&i2, Some(SPEPCONNECTION.eq.get_grad()));
               i1 = Equation::find_intersection(&parallel_eq, &SP3NORMAL);
           }
       },
       Direction::Y => {
           //Equation for horizontal line at the end
-          EPSTART = Equation::find_eq_point_gradient(ep, 0.0);
+          EPSTART = Equation::find_eq_point_gradient(ep, Some(0.0));
 
           //Find candidates for the first intermediary point.
           i1 = Equation::find_intersection_wVert(&SP3NORMAL, sp.x);
@@ -98,10 +97,10 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2
           
           //Uee the point with shorter distance to find the parallell line equation and subsequent second point distance.
           if i1_dist < i2_dist {
-              let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i1, SPEPCONNECTION.eq.get_grad());
+              let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i1, Some(SPEPCONNECTION.eq.get_grad()));
               i2 = Equation::find_intersection(&parrallel_eq, &EP3NORMAL);
           } else {
-              let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i2, SPEPCONNECTION.eq.get_grad());
+              let parrallel_eq: Equation = Equation::find_eq_point_gradient(&i2, Some(SPEPCONNECTION.eq.get_grad()));
               i1 = Equation::find_intersection(&parrallel_eq, &SP3NORMAL);
           }
       }
@@ -112,11 +111,33 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2
 }
 
 //Find the one turning point for a turn section.
-//See Mini Metro turns for visual.
 pub fn find_turn_point(sp: &Point2, ep: &Point2) -> Point2 {
   
+  //Find the horizontal equation at ep.
+  let epend: Equation = Equation::find_eq_point_gradient(ep, Some(0.0));
+
   
-  
-  //TEMP
-  pt2(0.0, 0.0)
+  /*
+    TODO:
+      Need to find the gradient between sp and ep and use which ever is the closest:
+        - Vertical, 1.0 or -1.0
+
+    Right now it is just using 1.0 or -1.0 depending on positioning.
+
+                                  OR  
+    Possibly implement a check at the end to check if the intersection falls within
+    the start and end points. If it does't retry with spstart being vertical.
+  */
+  let gen_slope_towards_ep: f32;
+  if ((sp.x<ep.x) & (sp.y<ep.y)) | ((sp.x>ep.x) & (sp.y>ep.y)) {
+    gen_slope_towards_ep = 1.0;
+  } else {
+    gen_slope_towards_ep = -1.0;
+  }
+
+  //Use the given slope in an equation.
+  let spstart: Equation = Equation::find_eq_point_gradient(sp, Some(gen_slope_towards_ep));
+
+  //Return the intersection
+  Equation::find_intersection(&spstart, &epend)
 }

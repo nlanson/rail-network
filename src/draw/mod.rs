@@ -14,11 +14,7 @@
 */
 
 //Dependencies
-use crate::{
-    Point2,
-    App,
-    Frame
-};
+use crate::{App, Frame, Point2, math::Equation};
 pub mod util;
 pub mod lines;
 
@@ -34,8 +30,10 @@ pub enum Dir {
     straight line or a curved line and it will do it.
 */
 pub fn draw(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame: &Frame) {
-    //Determine whether or not to draw a turn or a straight line.
-    if (sp.x == ep.x) | (sp.y == ep.y){
+    let eq: Equation = Equation::find_eq_two_points(sp, ep);
+
+    //Only draw a straight line if the gradients connecting the two points are 0, 1 or -1.
+    if (eq.get_grad() == 0.0) | (eq.get_grad() == 1.0) | (eq.get_grad() == -1.0) {
         lines::straight_line(sp, ep, colour, _app, _frame);
     } else {
         lines::turn(sp, ep, colour, _app, _frame);

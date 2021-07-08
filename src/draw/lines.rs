@@ -87,6 +87,7 @@ pub fn turn(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame: &Frame) 
 
     //Find the one turning point.
     let tp: Point2 = math::find_turn_point(sp, ep);
+    println!("SP={}, EP={}, TP={}", sp, ep, tp);
 
     //Draw the lines.
     draw.line()
@@ -99,4 +100,7 @@ pub fn turn(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame: &Frame) 
         .end(ep.clone())
         .weight(12.0)
         .color(util::get_colour(colour));
+
+    //Draw on frame
+    draw.to_frame(_app, &_frame);
 }
