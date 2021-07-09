@@ -10,6 +10,7 @@
      - Change/optimise Model and function to draw routes from model.
 */
 
+use map::station::Station;
 //External Dependencies
 pub use nannou::prelude::*;
 pub use rand::Rng;
@@ -23,7 +24,6 @@ pub mod map;
 
 //Bind
 use draw::draw as draw;
-use draw::lines::two_point_turn as cl; //Only still used to render the two point turns in routes. Will remove
 use map::route::SegType as SegmentType;
 
 fn main() {
@@ -80,27 +80,26 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
 }
 
 fn draw_manual_example_stations(_app: &App, _f: &Frame) {
-    //Create example stations
-    let chatswood: map::station::Station = map::station::Station::new(pt2(0.0, 200.0), "Chatswood");
-    let st_leonards: map::station::Station = map::station::Station::new(pt2(-150.0, 100.0), "St Leonards");
-    let atarmon: map::station::Station = map::station::Station::new(pt2(-100.0, -100.0), "Atarmon");
-    let north_sydney: map::station::Station = map::station::Station::new(pt2(100.0, 50.0), "North Sydney");
-
-    //Draw a straight line between example stations
+    //Turning examples:
+    let chatswood: map::Station = map::Station::new(pt2(0.0, 200.0), "Chatswood");
+    let st_leonards: map::Station = map::Station::new(pt2(-150.0, 100.0), "St Leonards");
+    let atarmon: map::Station = map::Station::new(pt2(-100.0, -100.0), "Atarmon");
+    let north_sydney: map::Station = map::Station::new(pt2(100.0, 50.0), "North Sydney");
     draw(&chatswood.coords, &atarmon.coords, "steelblue", _app, _f);
     draw(&st_leonards.coords, &north_sydney.coords, "limegreen", _app, _f);
 
-    //Draw curved lines for example stations
-    draw(&chatswood.coords, &st_leonards.coords, "coral", _app, _f);
-    draw(&st_leonards.coords, &atarmon.coords, "coral", _app, _f);
-    draw(&atarmon.coords, &north_sydney.coords, "coral", _app, _f);
-    draw(&north_sydney.coords, &chatswood.coords, "coral", _app, _f);
+    //Straight example:
+    let s1: map::Station = map::Station::new_with_random_name(pt2(-200.0, -150.0));
+    let s2: map::Station = map::Station::new_with_random_name(pt2(-200.0, 150.0));
+    draw(&s1.coords, &s2.coords, "coral", _app, _f);
 
     //Draw the stations
     chatswood.draw(_app, _f);
     st_leonards.draw(_app, _f);
     atarmon.draw(_app, _f);
     north_sydney.draw(_app, _f);
+    s1.draw(_app, _f);
+    s2.draw(_app, _f);
 }
 
 //This method is not finalised as I am yet to think of the algorithm to generate random maps
@@ -123,7 +122,7 @@ fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
                 },
                 SegmentType::Curve(crv) => {
                     //Render curve segment
-                    cl(&crv.start_station.coords, &crv.end_station.coords, &crv.direction, &_model.map[i].colour, _app, &_f);
+                    draw(&crv.start_station.coords, &crv.end_station.coords, &_model.map[i].colour, _app, &_f);
                     
                     //Draw stations on curve seg ends.
                     crv.start_station.draw(_app, &_f);

@@ -19,6 +19,6 @@ pub mod station;
 pub mod route;
 
 //Binds
-use station::Station as Station;
-use segments::curved::CurvedSeg as CurvedSeg;
-use segments::straight::StraightSeg as StraightSeg;
+pub use station::Station as Station;
+pub use segments::curved::CurvedSeg as CurvedSeg;
+pub use segments::straight::StraightSeg as StraightSeg;

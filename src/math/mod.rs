@@ -7,8 +7,7 @@
 
 //Dependencies
 use crate::{
-  Point2,
-  draw::Dir as Direction
+  Point2
 };
 pub mod equation;
 pub mod segment;
@@ -18,13 +17,58 @@ pub use equation::Equation as Equation;
 pub use segment::Seg as Seg;
 pub use segment::From as From;
 
-/**
+//KIND OF WORKING BUT NOT FOR ALL CASES. STILL NEED TO CHECK IF TP IS BETWEEN SP AND EP.
+//Find the one turning point for a turn section.
+//Returns Some(Point2) if the lines are drawable straight.
+pub fn find_turn_point(sp: &Point2, ep: &Point2) -> Option<Point2> {
+  //Find the equation of the line connecting sp and ep.
+  let spep: Equation = Equation::find_eq_two_points(sp, ep);
+
+  match spep.get_grad() {
+    //If not vertical
+    Some(mut m) => {
+      match m  {
+        //Return None if the gradients between the two are drawable straight.
+        x if x >= -1.0 && x <= -1.0 => None,
+        x if x >= 0.0 && x <= 0.0 =>   None,
+        x if x >= 1.0 && x <= 1.0 =>   None,
+        //If the gradient isn't drawable straight, return a point.
+        _ => {
+          //Set the slope from SP in the *general* direction towards EP.
+          if m >= -0.5 {
+            m = -1.0;
+          } else if m >= 0.0 {
+            m = 0.0;
+          } else if  m >= 0.5 {
+            m = 1.0
+          }
+
+          //Use the general slope to construct an equation.
+          let spstart: Equation = Equation::find_eq_point_gradient(sp, Some(m));
+
+          //Find the horizontal equation at ep.
+          let epend: Equation = Equation::find_eq_point_gradient(ep, Some(0.0));
+
+          //Return the intercept of the two points.
+          Some(Equation::find_intersection(&spstart, &epend))
+        }
+      }
+    },
+    //If vertical
+    None => {
+      None
+    }
+  }
+}
+
+/*
+   DEPRECIATED FUNCTION
  * Method to find the 2 intermediary points required for drawing a curved segment line in 
  * the draw module.
- * CAN MIGRATE TO DRAW MODULE LATER.
  *
-    How the fuck does this work???
-        (Image: https://imgur.com/a/gPKoSh1)
+ *
+    Explanation:
+        (Graphic: https://imgur.com/a/gPKoSh1)
             - Find the equation between sp and ep and find the point at a third and two thirds of the way 
               between sp and ep. [ Implemented as maths::find_eq() and maths::find_one_third_point() ]
             - Call the equation SPEPCONNECTION
@@ -40,7 +84,8 @@ pub use segment::From as From;
             - Then find the intersection points of EP3NORMAL and EP3START. This will be
               intermediary point two.
     
- */
+*/
+/*
 pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2, Point2) {
   //Equation of line connecting start and end points.
   let start: Point2 = sp.clone(); let end: Point2 = ep.clone();
@@ -109,35 +154,4 @@ pub fn find_intermediaries(sp: &Point2, ep: &Point2, dir: &Direction) -> (Point2
     //Return them
     (i1, i2)
 }
-
-//Find the one turning point for a turn section.
-pub fn find_turn_point(sp: &Point2, ep: &Point2) -> Point2 {
-  
-  //Find the horizontal equation at ep.
-  let epend: Equation = Equation::find_eq_point_gradient(ep, Some(0.0));
-
-  
-  /*
-    TODO:
-      Need to find the gradient between sp and ep and use which ever is the closest:
-        - Vertical, 1.0 or -1.0
-
-    Right now it is just using 1.0 or -1.0 depending on positioning.
-
-                                  OR  
-    Possibly implement a check at the end to check if the intersection falls within
-    the start and end points. If it does't retry with spstart being vertical.
-  */
-  let gen_slope_towards_ep: f32;
-  if ((sp.x<ep.x) & (sp.y<ep.y)) | ((sp.x>ep.x) & (sp.y>ep.y)) {
-    gen_slope_towards_ep = 1.0;
-  } else {
-    gen_slope_towards_ep = -1.0;
-  }
-
-  //Use the given slope in an equation.
-  let spstart: Equation = Equation::find_eq_point_gradient(sp, Some(gen_slope_towards_ep));
-
-  //Return the intersection
-  Equation::find_intersection(&spstart, &epend)
-}
+*/

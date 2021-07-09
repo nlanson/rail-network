@@ -27,10 +27,13 @@ impl Equation {
     }
 
     //Returns gradient of general form equation
-    pub fn get_grad(&self) -> f32 {
+    pub fn get_grad(&self) -> Option<f32> {
         
-        
-        -(self.a/self.b)
+        if self.b == 0.0 {
+            return None
+        }
+
+        Some(-(self.a/self.b))
     }
 
     /**

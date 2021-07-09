@@ -33,9 +33,16 @@ pub fn draw(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame: &Frame) 
     let eq: Equation = Equation::find_eq_two_points(sp, ep);
 
     //Only draw a straight line if the gradients connecting the two points are 0, 1 or -1.
-    if (eq.get_grad() == 0.0) | (eq.get_grad() == 1.0) | (eq.get_grad() == -1.0) {
-        lines::straight_line(sp, ep, colour, _app, _frame);
-    } else {
-        lines::turn(sp, ep, colour, _app, _frame);
+    match eq.get_grad() {
+        Some(m) => {
+            if (m == 0.0) | (m == 1.0) | (m == -1.0) {
+                lines::straight_line(sp, ep, colour, _app, _frame);
+            } else {
+                lines::turn(sp, ep, colour, _app, _frame);
+            }
+        },
+        None => {
+            lines::straight_line(sp, ep, colour, _app, _frame);
+        }
     }
 }

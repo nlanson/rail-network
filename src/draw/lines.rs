@@ -13,8 +13,7 @@ use crate::{
     math
 };
 use super::{
-    util,
-    Dir
+    util
 };
 
 /*
@@ -36,9 +35,51 @@ pub fn straight_line(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame:
     draw.to_frame(_app, &_frame);
 }
 
+//Draw a turn with ONE mid point.
+pub fn turn(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame: &Frame) {
+    let draw = _app.draw();
+
+    //Find the one turning point.
+    let tp: Option<Point2> = math::find_turn_point(sp, ep);
+
+    match tp {
+        //If the find_turn_point function returns None, it means the lines can be drawn with a straight line.
+        //This however should not happen as it is already guarded in the draw() entry point function.
+        //Just a backup.
+        None => {
+            //Deferring turn to straight_line
+            straight_line(sp, ep, colour, _app, _frame);
+        },
+        //If a turning point was identified, draw them and render it.
+        Some(p) => {
+            //Draw the lines.
+            draw.line()
+                .start(sp.clone())
+                .end(p)
+                .weight(12.0)
+                .color(util::get_colour(colour));
+            draw.line()
+                .start(p)
+                .end(ep.clone())
+                .weight(12.0)
+                .color(util::get_colour(colour));
+            draw.ellipse()
+                .color(util::get_colour(colour))
+                .w(12.0)
+                .h(12.0)
+                .x_y(p.x, p.y);
+
+            //Draw on frame
+            draw.to_frame(_app, &_frame);
+        }
+    }
+}
+
 /*
+     DEPRECIATED
     Takes in a start point, end point, initial direction and colour to draw a curved line with.
 */
+/*
 pub fn two_point_turn(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _app: &App, _frame: &Frame) {
     let draw = _app.draw();
 
@@ -80,27 +121,4 @@ pub fn two_point_turn(sp: &Point2, ep: &Point2, direction: &Dir, colour: &str, _
     //Draw on frame
     draw.to_frame(_app, &_frame);
 }
-
-//Draw a turn with ONE mid point.
-pub fn turn(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame: &Frame) {
-    let draw = _app.draw();
-
-    //Find the one turning point.
-    let tp: Point2 = math::find_turn_point(sp, ep);
-    println!("SP={}, EP={}, TP={}", sp, ep, tp);
-
-    //Draw the lines.
-    draw.line()
-        .start(sp.clone())
-        .end(tp)
-        .weight(12.0)
-        .color(util::get_colour(colour));
-    draw.line()
-        .start(tp)
-        .end(ep.clone())
-        .weight(12.0)
-        .color(util::get_colour(colour));
-
-    //Draw on frame
-    draw.to_frame(_app, &_frame);
-}
+*/
