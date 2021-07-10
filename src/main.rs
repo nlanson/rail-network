@@ -10,7 +10,6 @@
      - Change/optimise Model and function to draw routes from model.
 */
 
-use map::station::Station;
 //External Dependencies
 pub use nannou::prelude::*;
 pub use rand::Rng;
@@ -120,7 +119,7 @@ fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
                         stl.stations[s].draw(_app, &_f);
                     }
                 },
-                SegmentType::Curve(crv) => {
+                SegmentType::Turn(crv) => {
                     //Render curve segment
                     draw(&crv.start_station.coords, &crv.end_station.coords, &_model.map[i].colour, _app, &_f);
                     

@@ -12,6 +12,7 @@
      - Networks may be a good concept to look into for creating node based routes.
      - Maybe genearate route by starting with a random start station and then selecting gradient and distance to 
        continue at. sp -> s1 (grad45deg dist190) -> s2(contgrad45 samedist190) -> s3(grad90, samedist190) ...
+     - Could also use cubic functions to model routes.
 */
 
 //Dependencies
@@ -21,13 +22,12 @@ use crate::{
     Rng
 };
 use super::{
-    CurvedSeg,
-    StraightSeg,
-    Station
+    TurnSeg,
+    StraightSeg
 };
 
 pub enum SegType {
-    Curve(CurvedSeg),
+    Turn(TurnSeg),
     Straight(StraightSeg)
 }
 

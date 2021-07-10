@@ -9,22 +9,19 @@
 
 //Dependencies
 use crate::{
-    draw::Dir as Direction,
     map::Station
 };
 
-pub struct CurvedSeg {
+pub struct TurnSeg {
     pub start_station: Station,
-    pub end_station: Station,
-    pub direction: Direction
+    pub end_station: Station
 }
 
-impl CurvedSeg {
-    pub fn new(sp: Station, ep: Station, dir: Direction) -> Self {
+impl TurnSeg {
+    pub fn new(sp: Station, ep: Station) -> Self {
         Self {
             start_station: sp,
-            end_station: ep, 
-            direction: dir
+            end_station: ep
         }
     }
 }
