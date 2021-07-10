@@ -19,7 +19,7 @@ use crate::{
 };
 
 //Bind
-use math::segment::Seg as Seg;
+use math::Seg as Seg;
 
 pub struct StraightSeg {
     station_count: u8,

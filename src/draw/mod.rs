@@ -13,16 +13,11 @@
      - Water bodies and geography (eventually).
 */
 
-//Dependencies
+//Deps and Modules
 use crate::{App, Frame, Point2, math::Equation};
 pub mod util;
 pub mod lines;
 
-//Enum for directions.
-pub enum Dir {
-    X,
-    Y
-}
 
 /*
     Basic entry point for drawing lines.

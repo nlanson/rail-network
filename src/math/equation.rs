@@ -26,7 +26,9 @@ impl Equation {
         y
     }
 
-    //Returns gradient of general form equation
+    /**
+     * Returns gradient of general form equation
+     */
     pub fn get_grad(&self) -> Option<f32> {
         
         if self.b == 0.0 {
@@ -70,8 +72,7 @@ impl Equation {
     
     /**
      * Takes in a gradient slope and a point to find the equation.
-     * Equation is returned as a tuple (gradient, y-int) so it can
-     * be used later in form y=mx+b
+     * Equation is returned as a tuple (gradient, y-int) so it can be used later in form y=mx+b
      */
     pub fn find_eq_point_gradient(p: &Point2, m:Option<f32>) -> Self {
         //y=mx+c -> -mx+y-c=0
@@ -107,13 +108,6 @@ impl Equation {
      */
     pub fn find_intersection(f1: &Equation, f2: &Equation) -> Point2 {
         //From https://stackoverflow.com/questions/32702724/what-is-an-algorithm-to-find-intersection-of-two-linear-equations
-        //x = (f2.b-f1.b)/(f1m-f2m);
-
-        // -x+y-33.333=0 & 0x+y-100=0
-        // m1 = -(-1/1)    m2 = -(0)
-        // b1 = -(-33.33)  b2 = -(-100)
-        // x = (100-33.33)/(1) = 66.666
-        // f(66.666) = -66.6666+y-33.333 = 0
 
         //Convert to slope intercept form
         let m1: f32 = -(f1.a/f1.b);
@@ -128,11 +122,14 @@ impl Equation {
         pt2(x, y)
     }
 
+    /**
+    * Finds the intersection of two linear equations.
+    */
     pub fn find_intersection_wVert(f: &Equation, x: f32) -> Point2 {
         pt2(x, Equation::solve(f, x))
     }
 
-     /**
+    /**
      * Utility function that returns the perpendicular gradient of the 
      * inputted gradient.
      */

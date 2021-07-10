@@ -1,4 +1,4 @@
-#![allow(non_snake_case, dead_code)]
+#![allow(non_snake_case, dead_code, unused_variables)]
 /*
     Utility drawing methods
 */
@@ -23,7 +23,14 @@ pub fn fill_background(colour: &str, _app: &App, _frame: &Frame) {
     let draw = _app.draw();
 
     draw.background().color(get_colour(colour));
-    draw.to_frame(_app, &_frame);
+
+    //Draw on frame and error handle on failure
+    match draw.to_frame(_app, &_frame) {
+        Ok(T) => (),
+        Err(E) => {
+            panic!("Failed to draw at draw::util::fill_background()");
+        }
+    }
 }
 
 /*
@@ -44,7 +51,13 @@ pub fn draw_circular_station(coords: Point2, _app: &App, _frame: &Frame) {
             .h(22.0)
             .x_y(coords.x, coords.y);   
         
-        draw.to_frame(_app, &_frame);
+        //Draw on frame and error handle on failure
+        match draw.to_frame(_app, &_frame) {
+            Ok(T) => (),
+            Err(E) => {
+                panic!("Failed to draw at draw::util::draw_circular_station()");
+            }
+        }
 }
 
 pub fn get_colour(c: &str) -> Srgb<u8> {

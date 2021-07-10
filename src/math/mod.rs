@@ -12,7 +12,7 @@ use crate::{
 pub mod equation;
 pub mod segment;
 
-//Bind
+//Bind and export
 pub use equation::Equation as Equation;
 pub use segment::Seg as Seg;
 pub use segment::From as From;

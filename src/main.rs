@@ -13,8 +13,7 @@
 //External Dependencies
 pub use nannou::prelude::*;
 pub use rand::Rng;
-use palette::Srgb;
-use palette::named;
+pub use palette::{Srgb, named};
 
 //Internal Dependencies
 pub mod draw;
@@ -22,7 +21,7 @@ pub mod math;
 pub mod map;
 
 //Bind
-use draw::draw as draw;
+use draw::draw as draw_line;
 use map::route::SegType as SegmentType;
 
 fn main() {
@@ -84,13 +83,13 @@ fn draw_manual_example_stations(_app: &App, _f: &Frame) {
     let st_leonards: map::Station = map::Station::new(pt2(-150.0, 100.0), "St Leonards");
     let atarmon: map::Station = map::Station::new(pt2(-100.0, -100.0), "Atarmon");
     let north_sydney: map::Station = map::Station::new(pt2(100.0, 50.0), "North Sydney");
-    draw(&chatswood.coords, &atarmon.coords, "steelblue", _app, _f);
-    draw(&st_leonards.coords, &north_sydney.coords, "limegreen", _app, _f);
+    draw_line(&chatswood.coords, &atarmon.coords, "steelblue", _app, _f);
+    draw_line(&st_leonards.coords, &north_sydney.coords, "limegreen", _app, _f);
 
     //Straight example:
     let s1: map::Station = map::Station::new_with_random_name(pt2(-200.0, -150.0));
     let s2: map::Station = map::Station::new_with_random_name(pt2(-200.0, 150.0));
-    draw(&s1.coords, &s2.coords, "coral", _app, _f);
+    draw_line(&s1.coords, &s2.coords, "coral", _app, _f);
 
     //Draw the stations
     chatswood.draw(_app, _f);
@@ -112,7 +111,7 @@ fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
             match &_model.map[i].segs[x] {
                 SegmentType::Straight(stl) => {
                     //Render straight segment
-                    draw(&stl.segment.start, &stl.segment.end, &_model.map[i].colour, _app, &_f);
+                    draw_line(&stl.segment.start, &stl.segment.end, &_model.map[i].colour, _app, &_f);
 
                     //Draw every staion on the line
                     for s in 0..stl.stations.len() {
@@ -121,7 +120,7 @@ fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
                 },
                 SegmentType::Turn(crv) => {
                     //Render curve segment
-                    draw(&crv.start_station.coords, &crv.end_station.coords, &_model.map[i].colour, _app, &_f);
+                    draw_line(&crv.start_station.coords, &crv.end_station.coords, &_model.map[i].colour, _app, &_f);
                     
                     //Draw stations on curve seg ends.
                     crv.start_station.draw(_app, &_f);

@@ -67,8 +67,7 @@ impl Route {
         */
         // route_segs.push(SegType::Curve(CurvedSeg::new(
         //     Station::new_with_random_name(pt2(0.0, -400.0)),
-        //     Station::new_with_random_name(pt2(-200.0, -300.0)),
-        //     draw::Dir::X
+        //     Station::new_with_random_name(pt2(-200.0, -300.0))
         // )));
 
         // route_segs.push(SegType::Straight(StraightSeg::defined_new(
@@ -80,14 +79,12 @@ impl Route {
 
         // route_segs.push(SegType::Curve(CurvedSeg::new(
         //     Station::new_with_random_name(pt2(-200.0, 300.0)),
-        //     Station::new_with_random_name(pt2(0.0, 400.0)),
-        //     draw::Dir::Y
+        //     Station::new_with_random_name(pt2(0.0, 400.0))
         // )));
 
         // route_segs.push(SegType::Curve(CurvedSeg::new(
         //     Station::new_with_random_name(pt2(0.0, 400.0)),
-        //     Station::new_with_random_name(pt2(200.0, 300.0)),
-        //     draw::Dir::X
+        //     Station::new_with_random_name(pt2(200.0, 300.0))
         // )));
 
         // route_segs.push(SegType::Straight(StraightSeg::defined_new(
@@ -99,8 +96,7 @@ impl Route {
 
         // route_segs.push(SegType::Curve(CurvedSeg::new(
         //     Station::new_with_random_name(pt2(200.0, -300.0)),
-        //     Station::new_with_random_name(pt2(0.0, -400.0)),
-        //     draw::Dir::Y
+        //     Station::new_with_random_name(pt2(0.0, -400.0))
         // )));
         
         

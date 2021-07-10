@@ -1,4 +1,4 @@
-#![allow(non_snake_case, dead_code)]
+#![allow(non_snake_case, dead_code, unused_variables)]
 /*
     Line module that houses functions that 
     draw straight linesm two point turn lines 
@@ -32,7 +32,13 @@ pub fn straight_line(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame:
         .weight(12.0)
         .color(util::get_colour(colour));
     
-    draw.to_frame(_app, &_frame);
+    //Draw on frame and error handle on failure
+    match draw.to_frame(_app, &_frame) {
+        Ok(T) => (),
+        Err(E) => {
+            panic!("Failed to draw at draw::lines::straight_line()");
+        }
+    }
 }
 
 //Draw a turn with ONE mid point.
@@ -69,8 +75,13 @@ pub fn turn(sp: &Point2, ep: &Point2, colour: &str, _app: &App, _frame: &Frame) 
                 .h(12.0)
                 .x_y(p.x, p.y);
 
-            //Draw on frame
-            draw.to_frame(_app, &_frame);
+            //Draw on frame and error handle on failure
+            match draw.to_frame(_app, &_frame) {
+                Ok(T) => (),
+                Err(E) => {
+                    panic!("Failed to draw at draw::lines::turn()");
+                }
+            }
         }
     }
 }
