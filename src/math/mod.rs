@@ -32,31 +32,64 @@ pub fn find_turn_point(sp: &Point2, ep: &Point2) -> Option<Point2> {
         x if x >= -1.0 && x <= -1.0 => None,
         x if x >= 0.0 && x <= 0.0 =>   None,
         x if x >= 1.0 && x <= 1.0 =>   None,
+
         //If the gradient isn't drawable straight, return a point.
         _ => {
-          //Set the slope from SP in the *general* direction towards EP.
-          if m >= -0.5 {
-            m = -1.0;
-          } else if m >= 0.0 {
-            m = 0.0;
-          } else if  m >= 0.5 {
-            m = 1.0
-          }
-
-          //Use the general slope to construct an equation.
-          let spstart: Equation = Equation::find_eq_point_gradient(sp, Some(m));
-
-          //Find the horizontal equation at ep.
-          let epend: Equation = Equation::find_eq_point_gradient(ep, Some(0.0));
-
-          //Return the intercept of the two points.
-          Some(Equation::find_intersection(&spstart, &epend))
 
           /*
-            Need to check if the returned value is inbetween the start/end coordinates
-            and if not reevaluate starting with a vertical horizontal line and general
-            end gradient.
+            Figure out two cases:
+              Going down the general gradient from SP and meeting the horizontal line at EP.
+              If the SP general gradient is 0.0, the ending line will be calculated. 
+                                                OR
+              Going vertically from SP and meeting the general gradient line from EP.
           */
+
+          //Setting the gradients of the lines starting at SP and EP.
+          let mut m2: f32 = 1.0;
+          if m <= -0.5 {
+            //epend is horizontal.
+            m = -1.0;
+            m2 = 0.0; 
+          } else if m > -0.5 && m < 0.5 {
+            //Epend cannot be horizontal as it will lead to spstart and epend being paralell.
+            //Therefore, we need to find anoter general gradient for epend.
+            m = 0.0; 
+
+            //Find the general gradient between EP and SP from EP and assign to m2.
+            let epsp: Equation = Equation::find_eq_two_points(ep, sp);
+            match epsp.get_grad() {
+              Some(x) => {
+                if x <= 0.0 {
+                  m2 = -1.0;
+                } else {
+                  m2 = 1.0;
+                }
+              },
+              None => {
+                panic!("EPSP cannot be vertical.");
+              }
+            }
+          } else if  m >= 0.5 {
+            //epend is horizontal.
+            m = 1.0;
+            m2= 0.0;
+          }
+
+          //Gradient from SP
+          let spstart: Equation = Equation::find_eq_point_gradient(sp, Some(m));
+          let epend: Equation = Equation::find_eq_point_gradient(ep, Some(m2));
+          let intersection1: Point2 = Equation::find_intersection(&spstart, &epend);
+
+          //Vertical from SP
+          let gepend: Equation = Equation::find_eq_point_gradient(ep, Some(m));
+          let intersection2: Point2 = Equation::find_intersection_wVert(&gepend, sp.x);
+
+          //Compare distance from SP to i1 and i2 and return the shorter one.
+          if (Seg::new(ep.clone(), intersection1).get_distance()) > (Seg::new(ep.clone(), intersection2).get_distance()) {
+            Some(intersection2)
+          } else {
+            Some(intersection1)
+          }
         }
       }
     },

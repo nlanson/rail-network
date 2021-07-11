@@ -83,8 +83,10 @@ fn draw_manual_example_stations(_app: &App, _f: &Frame) {
     let st_leonards: map::Station = map::Station::new(pt2(-150.0, 100.0), "St Leonards");
     let atarmon: map::Station = map::Station::new(pt2(-100.0, -100.0), "Atarmon");
     let north_sydney: map::Station = map::Station::new(pt2(100.0, 50.0), "North Sydney");
-    draw_line(&chatswood.coords, &atarmon.coords, "steelblue", _app, _f);
-    draw_line(&st_leonards.coords, &north_sydney.coords, "limegreen", _app, _f);
+    draw_line(&atarmon.coords, &chatswood.coords, "steelblue", _app, _f);
+    draw_line(&north_sydney.coords, &st_leonards.coords, "limegreen", _app, _f);
+    draw_line(&north_sydney.coords, &atarmon.coords, "deepskyblue", _app, _f);
+    draw_line(&st_leonards.coords, &chatswood.coords, "mediumpurple", _app, _f);
 
     //Straight example:
     let s1: map::Station = map::Station::new_with_random_name(pt2(-200.0, -150.0));
