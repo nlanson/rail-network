@@ -66,7 +66,7 @@ pub fn get_colour(c: &str) -> Srgb<u8> {
 
 pub fn random_colour() -> String {
     //List of nice looking colours to pick from
-    let colours: [&str; 10] = [
+    const COLOURS: [&str; 10] = [
         "coral",
         "steelblue",
         "limegreen",
@@ -79,7 +79,7 @@ pub fn random_colour() -> String {
         "crimson"
     ];
     
-    let n: usize = rand::thread_rng().gen_range(0..colours.len());
+    let n: usize = rand::thread_rng().gen_range(0..COLOURS.len());
 
-    String::from(colours[n])
+    String::from(COLOURS[n])
 }

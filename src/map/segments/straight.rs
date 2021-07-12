@@ -23,9 +23,9 @@ use math::Seg as Seg;
 
 pub struct StraightSeg {
     station_count: u8,
-    pub dist: f32,
-    pub segment: Seg,
-    pub stations: Vec<Station>
+    dist: f32,
+    pub segment: Seg, //The line
+    pub stations: Vec<Station> //The stations on the line
 }
 
 impl StraightSeg {

@@ -36,7 +36,7 @@ struct Model {
     
     //THE ARRAY LENGTH HERE IS SET TO ONE FOR TESTING PURPOSES
     //Meaning only one route needs to be generated.
-    map: [map::route::Route; 1] 
+    map: [map::route::SegBased_Route; 1] 
 }
 
 //Sets the initial Model state.
@@ -48,7 +48,7 @@ fn model(_app: &App) -> Model {
             Map gen only returns an array with ONE ROUTE only
             for testing purposes
        */
-        map: [map::route::Route::new()]
+        map: [map::route::SegBased_Route::new()]
     }
 }
 
@@ -109,7 +109,7 @@ fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
     for i in 0.._model.map.len() {
         //For each segment
         for x in 0.._model.map[i].segs.len() {
-            //match the segment type
+            //Match segment type to extract information
             match &_model.map[i].segs[x] {
                 SegmentType::Straight(stl) => {
                     //Render straight segment
