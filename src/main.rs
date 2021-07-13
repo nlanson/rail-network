@@ -41,6 +41,9 @@ struct Model {
 
 //Sets the initial Model state.
 fn model(_app: &App) -> Model {
+    //To test the NodeBased_Route Struct
+    map::route::NodeBased_Route::new();
+    
     Model {
         _window: _app.new_window().size(1440, 1000).view(view).build().unwrap(),
        

@@ -99,3 +99,17 @@ pub fn find_turn_point(sp: &Point2, ep: &Point2) -> Option<Point2> {
     }
   }
 }
+
+pub fn find_quadrant(point: &Point2) -> u8 {
+  if point.x > 0.0 && point.y > 0.0 {
+    1
+  } else if point.x < 0.0 && point.y > 0.0 {
+    2
+  } else if point.x < 0.0 && point.y < 0.0 {
+    3
+  } else if point.x > 0.0 && point.y < 0.0{
+    4
+  } else {
+    0
+  }
+}

@@ -19,7 +19,9 @@
 use crate::{
     pt2,
     draw,
-    Rng
+    Rng,
+    Point2,
+    math
 };
 use super::{
     TurnSeg,
@@ -72,7 +74,7 @@ impl SegBased_Route {
 }
 
 
-struct NodeBased_Route {
+pub struct NodeBased_Route {
     pub stations: Vec<Station>,
     pub name: String,
     pub colour: String
@@ -106,6 +108,14 @@ impl NodeBased_Route {
             Repeat steps 2 to 4 substituting the new station as the starting point.
         */
 
+        //Create a random start point with X range -600 ~ 600, Y range -400 ~ 400. THen find the quadrant of the point.
+        let sp: Point2 = pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0));
+        let sp_quadrant: u8 = math::find_quadrant(&sp);
+        
+        /*
+            Using sp_quadrant, we need to create a range/window of gradients that the route can extend towards.
+            Prob use a tuple ton store min/max
+        */
 
         //Temporary return
         let mut v: Vec<Station> = vec![];
