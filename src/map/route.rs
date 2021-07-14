@@ -108,18 +108,76 @@ impl NodeBased_Route {
             Repeat steps 2 to 4 substituting the new station as the starting point.
         */
 
+        //Initialise variables
+        const dist: u32 = 200;
+        let mut sp: Point2;
+        let mut sp_quadrant: u8;
+        
+        
+
         //Create a random start point with X range -600 ~ 600, Y range -400 ~ 400. THen find the quadrant of the point.
-        let sp: Point2 = pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0));
-        let sp_quadrant: u8 = math::find_quadrant(&sp);
+        loop {
+            sp = pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0));
+            sp_quadrant= math::find_quadrant(&sp);
+
+            if sp_quadrant != 0 {
+                break;
+            }
+        }
+
+        ///Set the directional window. Tuple values are (min, max, flip)
+        let mut directional_window: (f32, f32, bool) = Self::match_quadrant(sp_quadrant);
+
+        //Set the slope within the window.
+        let mut slope: Option<f32> = Self::gen_slope(&directional_window);
         
         /*
-            Using sp_quadrant, we need to create a range/window of gradients that the route can extend towards.
-            Prob use a tuple ton store min/max
+            Using the slope and distance need to generate point.
+
+            Once the point is generated, store the slope in a variable and repeat the process again 
+            but starting at the newly generated point. Let the new slope have a 1/3 chance to be
+            the same as the old slope (Straight line) and if not do the generation again.
         */
 
         //Temporary return
         let mut v: Vec<Station> = vec![];
         v.push(Station::new_with_random_name(pt2(0.0, 0.0)));
         v
+    }
+
+    fn match_quadrant(quadrant: u8) -> (f32, f32, bool) {
+        //Based on the quadrant, fill the directional window values
+        match quadrant {
+            1 => {
+                (0.0, 10.0, false)
+            },
+            2 => {
+                (0.0, 10.0, true)
+            },
+            3 => {
+                (-10.0, 0.0, false)
+            },
+            4 => {
+                (-10.0, 0.0, true)
+            },
+            _ => panic!("Quadrant not acceptable.")
+        }
+    }
+
+    fn gen_slope(window: &(f32, f32, bool)) -> Option<f32> {
+        //Generate a random slope within the window.
+        let slope: Option<f32> = Some(rand::thread_rng().gen_range(window.0 as f32 .. window.1 + 1 as f32));
+
+        //Set the slope to be vertical if the generated value is greater than 9.5 or less than -9.5
+        match slope {
+            Some(x) => {
+                if (x >= 9.5) || (x <= -9.5) {
+                    None
+                } else {
+                    Some(x)
+                }
+            },
+            _ => panic!("Unknown None.")
+        }
     }
 }
