@@ -84,7 +84,7 @@ impl NodeBased_Route {
     pub fn new() -> Self {
         let route_name: String = String::from("T") + &(rand::thread_rng().gen_range(0..9) as u8).to_string();
         let route_colour: String = draw::util::random_colour();
-        let route_stations: Vec<Station> = Self::create_stations(rand::thread_rng().gen_range(2..4));
+        let route_stations: Vec<Station> = Self::create_stations(rand::thread_rng().gen_range(4..8));
 
         Self {
             name: route_name,
@@ -106,6 +106,14 @@ impl NodeBased_Route {
                (Let the previous straight segment influence the next)
                
             Repeat steps 2 to 4 substituting the new station as the starting point.
+
+
+            Other idea:
+            Create 4 arrays. Each filled with random points from each quadrant.
+            Select 2 of the arrays.
+            Select a start point from one and an end point from another.
+            Join the two arrays.
+            Find the closest route from the start to end travelling THROUGH the other points.
         */
 
         //Initialise variables
@@ -128,20 +136,23 @@ impl NodeBased_Route {
             by matching the quadrant each time.
 
             It does NOT take into account the previous gradient. (It should.)
+
+            It is returning RANDOM SHIT right now.
         */
         let mut directional_window: (f32, f32, bool);
         let mut slope: Option<f32>;
         let mut segment: math::Seg;
         let mut prev_point: Point2 = sp;
         for i in 0..count-1 {
-            quadrant = math::find_quadrant(&prev_point);
-            Self::validate_quadrant(&mut prev_point, quadrant);
-            directional_window = Self::match_quadrant(quadrant);
-            slope = Self::gen_slope(&directional_window);
-            segment = math::Seg::new_from_point_gradient(prev_point, slope, dist);
+            // quadrant = math::find_quadrant(&prev_point);
+            // Self::validate_quadrant(&mut prev_point, quadrant);
+            // directional_window = Self::match_quadrant(quadrant);
+            // slope = Self::gen_slope(&directional_window);
+            // segment = math::Seg::new_from_point_gradient(prev_point, slope, dist);
 
-            station_coords.push(segment.end);
-            prev_point = segment.end;
+            // station_coords.push(segment.end);
+            // prev_point = segment.end;
+            station_coords.push(pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0)));
         }
 
         

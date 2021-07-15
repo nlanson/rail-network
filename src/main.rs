@@ -34,9 +34,9 @@ fn main() {
 struct Model {
     _window: window::Id,
     
-    //THE ARRAY LENGTH HERE IS SET TO ONE FOR TESTING PURPOSES
+    //THE ARRAY LENGTH HERE IS SET TO THREE FOR TESTING PURPOSES
     //Meaning only one route needs to be generated.
-    map: [map::route::NodeBased_Route; 1] 
+    map: [map::route::NodeBased_Route; 3] 
 }
 
 //Sets the initial Model state.
@@ -48,7 +48,7 @@ fn model(_app: &App) -> Model {
             Map gen only returns an array with ONE ROUTE only
             for testing purposes
        */
-        map: [map::route::NodeBased_Route::new()]
+        map: [map::route::NodeBased_Route::new(),map::route::NodeBased_Route::new(),map::route::NodeBased_Route::new()]
     }
 }
 
@@ -107,10 +107,11 @@ fn draw_manual_example_stations(_app: &App, _f: &Frame) {
 fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
     //For each route
     for i in 0.._model.map.len() {
-        let prev_station: &map::Station = &_model.map[i].stations[0];
+        let mut prev_station: &map::Station = &_model.map[i].stations[0];
         for x in 0.._model.map[i].stations.len()-1 {
-            let next_station: &map::Station = &_model.map[i].stations[x+1];
-            draw_line(&prev_station.coords, &next_station.coords, &_model.map[i].colour, _app, _f);
+            let curr_station: &map::Station = &_model.map[i].stations[x+1];
+            draw_line(&prev_station.coords, &curr_station.coords, &_model.map[i].colour, _app, _f);
+            prev_station = curr_station;
         }
 
         for x in 0.._model.map[i].stations.len() {
