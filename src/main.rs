@@ -36,14 +36,11 @@ struct Model {
     
     //THE ARRAY LENGTH HERE IS SET TO ONE FOR TESTING PURPOSES
     //Meaning only one route needs to be generated.
-    map: [map::route::SegBased_Route; 1] 
+    map: [map::route::NodeBased_Route; 1] 
 }
 
 //Sets the initial Model state.
 fn model(_app: &App) -> Model {
-    //To test the NodeBased_Route Struct
-    map::route::NodeBased_Route::new();
-    
     Model {
         _window: _app.new_window().size(1440, 1000).view(view).build().unwrap(),
        
@@ -51,7 +48,7 @@ fn model(_app: &App) -> Model {
             Map gen only returns an array with ONE ROUTE only
             for testing purposes
        */
-        map: [map::route::SegBased_Route::new()]
+        map: [map::route::NodeBased_Route::new()]
     }
 }
 
@@ -73,10 +70,10 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
     draw::util::fill_background("beige", _app, &_f);
     
     //Function that draws routes manually
-    draw_manual_example_stations(_app, &_f);
+    //draw_manual_example_stations(_app, &_f);
 
     //Function that draws from model state
-    //draw_from_model(_app, _model, &_f);
+    draw_from_model(_app, _model, &_f);
 
 }
 
@@ -110,28 +107,15 @@ fn draw_manual_example_stations(_app: &App, _f: &Frame) {
 fn draw_from_model(_app: &App, _model: &Model, _f: &Frame) {
     //For each route
     for i in 0.._model.map.len() {
-        //For each segment
-        for x in 0.._model.map[i].segs.len() {
-            //Match segment type to extract information
-            match &_model.map[i].segs[x] {
-                SegmentType::Straight(stl) => {
-                    //Render straight segment
-                    draw_line(&stl.segment.start, &stl.segment.end, &_model.map[i].colour, _app, &_f);
+        let prev_station: &map::Station = &_model.map[i].stations[0];
+        for x in 0.._model.map[i].stations.len()-1 {
+            let next_station: &map::Station = &_model.map[i].stations[x+1];
+            draw_line(&prev_station.coords, &next_station.coords, &_model.map[i].colour, _app, _f);
+        }
 
-                    //Draw every staion on the line
-                    for s in 0..stl.stations.len() {
-                        stl.stations[s].draw(_app, &_f);
-                    }
-                },
-                SegmentType::Turn(crv) => {
-                    //Render curve segment
-                    draw_line(&crv.start_station.coords, &crv.end_station.coords, &_model.map[i].colour, _app, &_f);
-                    
-                    //Draw stations on curve seg ends.
-                    crv.start_station.draw(_app, &_f);
-                    crv.end_station.draw(_app, &_f);
-                }
-            }
+        for x in 0.._model.map[i].stations.len() {
+            let station = &_model.map[i].stations[x];
+            station.draw(_app, _f);
         }
     }
 }

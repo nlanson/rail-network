@@ -84,7 +84,7 @@ impl NodeBased_Route {
     pub fn new() -> Self {
         let route_name: String = String::from("T") + &(rand::thread_rng().gen_range(0..9) as u8).to_string();
         let route_colour: String = draw::util::random_colour();
-        let route_stations: Vec<Station> = Self::create_stations(rand::thread_rng().gen_range(0..6));
+        let route_stations: Vec<Station> = Self::create_stations(rand::thread_rng().gen_range(2..4));
 
         Self {
             name: route_name,
@@ -109,27 +109,41 @@ impl NodeBased_Route {
         */
 
         //Initialise variables
-        const dist: u32 = 200;
+        let mut station_coords: Vec<Point2> = vec![];
+        const dist: f32 = 150.0;
         let mut sp: Point2;
-        let mut sp_quadrant: u8;
+        let mut quadrant: u8;
         
         
 
-        //Create a random start point with X range -600 ~ 600, Y range -400 ~ 400. THen find the quadrant of the point.
-        loop {
-            sp = pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0));
-            sp_quadrant= math::find_quadrant(&sp);
+        //Create a random start point, validate that it lives in a quadrant then push it.
+        sp = pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0));
+        quadrant= math::find_quadrant(&sp);
+        Self::validate_quadrant(&mut sp, quadrant);
+        station_coords.push(sp);
 
-            if sp_quadrant != 0 {
-                break;
-            }
+        
+        /*
+            This algo currently generates a new point from the previous point
+            by matching the quadrant each time.
+
+            It does NOT take into account the previous gradient. (It should.)
+        */
+        let mut directional_window: (f32, f32, bool);
+        let mut slope: Option<f32>;
+        let mut segment: math::Seg;
+        let mut prev_point: Point2 = sp;
+        for i in 0..count-1 {
+            quadrant = math::find_quadrant(&prev_point);
+            Self::validate_quadrant(&mut prev_point, quadrant);
+            directional_window = Self::match_quadrant(quadrant);
+            slope = Self::gen_slope(&directional_window);
+            segment = math::Seg::new_from_point_gradient(prev_point, slope, dist);
+
+            station_coords.push(segment.end);
+            prev_point = segment.end;
         }
 
-        ///Set the directional window. Tuple values are (min, max, flip)
-        let mut directional_window: (f32, f32, bool) = Self::match_quadrant(sp_quadrant);
-
-        //Set the slope within the window.
-        let mut slope: Option<f32> = Self::gen_slope(&directional_window);
         
         /*
             Using the slope and distance need to generate point.
@@ -139,10 +153,8 @@ impl NodeBased_Route {
             the same as the old slope (Straight line) and if not do the generation again.
         */
 
-        //Temporary return
-        let mut v: Vec<Station> = vec![];
-        v.push(Station::new_with_random_name(pt2(0.0, 0.0)));
-        v
+        //Return
+        Self::coords_list_to_Stations(station_coords)
     }
 
     fn match_quadrant(quadrant: u8) -> (f32, f32, bool) {
@@ -155,12 +167,22 @@ impl NodeBased_Route {
                 (0.0, 10.0, true)
             },
             3 => {
-                (-10.0, 0.0, false)
-            },
-            4 => {
                 (-10.0, 0.0, true)
             },
+            4 => {
+                (-10.0, 0.0, false)
+            },
             _ => panic!("Quadrant not acceptable.")
+        }
+    }
+
+    fn validate_quadrant(point: &mut Point2, quadrant: u8) {
+        loop {
+            if quadrant == 0 {
+                point.x += 1.0
+            } else {
+                break
+            }
         }
     }
 
@@ -171,7 +193,7 @@ impl NodeBased_Route {
         //Set the slope to be vertical if the generated value is greater than 9.5 or less than -9.5
         match slope {
             Some(x) => {
-                if (x >= 9.5) || (x <= -9.5) {
+                if (x >= 9.0) || (x <= -9.0) { //Change these values here to affect the likely hood of a vertical line spawning.
                     None
                 } else {
                     Some(x)
@@ -179,5 +201,19 @@ impl NodeBased_Route {
             },
             _ => panic!("Unknown None.")
         }
+    }
+
+    // fn gen_new_station_point(prev: Point2, delta: Option<f32>, dist: f32) -> Point2 {
+
+    // }
+
+    fn coords_list_to_Stations(list: Vec<Point2>) -> Vec<Station> {
+        let mut stations: Vec<Station> = vec![];
+        for i in 0..list.len() {
+            stations.push(Station::new_with_random_name(list[i]));
+            println!("{}", list[i]);
+        }
+
+        stations
     }
 }
