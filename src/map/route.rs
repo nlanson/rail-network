@@ -80,6 +80,11 @@ pub struct NodeBased_Route {
     pub colour: String
 }
 
+struct PrevStationData {
+    pub angle: Option<f32>,
+    pub coords: Point2
+}
+
 impl NodeBased_Route {
     pub fn new() -> Self {
         let route_name: String = String::from("T") + &(rand::thread_rng().gen_range(0..9) as u8).to_string();
@@ -142,17 +147,23 @@ impl NodeBased_Route {
         let mut directional_window: (f32, f32, bool);
         let mut slope: Option<f32>;
         let mut segment: math::Seg;
-        let mut prev_point: Point2 = sp;
+        let mut prev_point: PrevStationData = PrevStationData {
+            angle: None,
+            coords: sp
+        };
         for i in 0..count-1 {
-            // quadrant = math::find_quadrant(&prev_point);
-            // Self::validate_quadrant(&mut prev_point, quadrant);
-            // directional_window = Self::match_quadrant(quadrant);
-            // slope = Self::gen_slope(&directional_window);
-            // segment = math::Seg::new_from_point_gradient(prev_point, slope, dist);
+            quadrant = math::find_quadrant(&prev_point.coords);
+            Self::validate_quadrant(&mut prev_point.coords, quadrant);
+            directional_window = Self::match_quadrant(quadrant);
+            slope = Self::gen_slope(&directional_window);
+            segment = math::Seg::new_from_point_gradient(prev_point.coords, slope, dist);
 
-            // station_coords.push(segment.end);
-            // prev_point = segment.end;
-            station_coords.push(pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0)));
+            station_coords.push(segment.end);
+            prev_point = PrevStationData {
+                angle: slope,
+                coords: segment.end
+            }
+            //station_coords.push(pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0)));
         }
 
         
