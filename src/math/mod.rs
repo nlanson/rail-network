@@ -11,6 +11,7 @@ use crate::{
 };
 pub mod equation;
 pub mod segment;
+pub mod util;
 
 //Bind and export
 pub use equation::Equation as Equation;

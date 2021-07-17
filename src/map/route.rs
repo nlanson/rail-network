@@ -143,6 +143,16 @@ impl NodeBased_Route {
             It does NOT take into account the previous gradient. (It should.)
 
             It is returning RANDOM SHIT right now.
+
+            New proposal:
+             - Generate random starting point and a delta direction of the starting point based on what quadrant it is in.
+             - Using the delta direction, create a directional window of 90 degrees extending 45 degrees both ways from the 
+               delta direction.
+             - Select a random direction within the window, adjust it by adding the delta direction and if it is equal to 
+               90 or 270 then it will be vertical. All other values are not vertical. (tan90 and tan270 == undefined)
+             - Find the point along the selected direction a certain distance away and save the selected direction as the new
+               delta direction of the new point and repeat.
+            
         */
         let mut directional_window: (f32, f32, bool);
         let mut slope: Option<f32>;
@@ -176,6 +186,7 @@ impl NodeBased_Route {
         */
 
         //Return
+        println!("{}", (90 as f32).to_radians().tan());
         Self::coords_list_to_Stations(station_coords)
     }
 
