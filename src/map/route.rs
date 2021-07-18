@@ -182,19 +182,21 @@ impl NodeBased_Route {
     //Using the previous direction, generate a new direction.
     //Need to implement the chance for section to continue in same direction.
     fn gen_dir_from_prev_dir(prevdir: f32) -> f32 {
-        let mut dir: f32 = rand::thread_rng().gen_range(prevdir-45.0..prevdir+45.0);
+        let mut dir: i32 = rand::thread_rng().gen_range((prevdir as i32)-90..(prevdir as i32)+90);
 
         loop {
-            if dir > 360.0 {
-                dir = dir - 360.0;
-            } else if dir < 0.0 {
-                dir = dir + 360.0
+            if dir > 360 {
+                dir = dir - 360;
+            } else if dir < 0 {
+                dir = dir + 360
             } else {
                 break;
             }
         }
 
-        dir
+        println!("{} -> {}", prevdir, dir);
+
+        dir as f32
     }
 
     fn get_deltaD_from_quadrant(quadrant: u8) -> f32 {
