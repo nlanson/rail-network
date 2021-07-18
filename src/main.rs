@@ -34,9 +34,9 @@ fn main() {
 struct Model {
     _window: window::Id,
     
-    //THE ARRAY LENGTH HERE IS SET TO THREE FOR TESTING PURPOSES
+    //THE ARRAY LENGTH HERE IS SET TO ONE FOR TESTING PURPOSES
     //Meaning only one route needs to be generated.
-    map: [map::route::NodeBased_Route; 3] 
+    map: [map::route::NodeBased_Route; 1] 
 }
 
 //Sets the initial Model state.
@@ -48,7 +48,7 @@ fn model(_app: &App) -> Model {
             Map gen only returns an array with ONE ROUTE only
             for testing purposes
        */
-        map: [map::route::NodeBased_Route::new(),map::route::NodeBased_Route::new(),map::route::NodeBased_Route::new()]
+        map: [map::route::NodeBased_Route::new()]
     }
 }
 
