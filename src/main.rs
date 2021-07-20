@@ -8,7 +8,7 @@
 
     TODO:
      - Change/optimise Model and function to draw routes from model.
-     - Fix drawing turns that should start off vertically upwards.
+     - Fix math::Seg::new_from_point_gradient() to find end point using trig
 */
 
 //External Dependencies

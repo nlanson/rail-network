@@ -175,7 +175,7 @@ impl NodeBased_Route {
         }
 
         let slope = Some(math::util::d2r(dir));
-        let seg: math::Seg = math::Seg::new_from_point_gradient(prevCoords, slope, dist);
+        let seg: math::Seg = math::Seg::new_from_point_gradient(prevCoords, Some(2.0), dist);
         return seg.end;
     }
 
@@ -193,8 +193,6 @@ impl NodeBased_Route {
                 break;
             }
         }
-
-        println!("{} -> {}", prevdir, dir);
 
         dir as f32
     }

@@ -9,7 +9,8 @@ use crate::{
     Point2,
     pt2,
     Pow,
-    math::Equation
+    math::Equation,
+    math::util
 };
 
 
@@ -40,9 +41,10 @@ impl Seg {
                 let eq: Equation = Equation::find_eq_point_gradient(&sp, Some(m));
         
                 //Find end point using distance and point
-                let angle: f32 = m.atan();
+                let angle: f32 = util::r2d(m);
+                println!("angle {}", angle);
                 let y_dist: f32 = dist * angle.sin();
-                let x_dist: f32 = dist*angle.cos();
+                let x_dist: f32 = dist * angle.cos();
                 let ep: Point2 = pt2(sp.x+x_dist, sp.y+y_dist);
         
                 Self {

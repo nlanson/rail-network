@@ -11,6 +11,10 @@ pub fn d2r(deg: f32) -> f32 {
     deg * (PI()/180.0)
 }
 
+pub fn r2d(rad: f32) -> f32 {
+    rad * (180.0/PI())
+}
+
 pub fn PI() -> f32 {
     std::f32::consts::PI
 }
