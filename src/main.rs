@@ -23,7 +23,6 @@ pub mod map;
 
 //Bind
 use draw::draw as draw_line;
-use map::route::SegType as SegmentType;
 
 fn main() {
     nannou::app(model)
@@ -80,27 +79,12 @@ fn view(_app: &App, _model: &Model, _f: Frame) {
 
 fn draw_manual_example_stations(_app: &App, _f: &Frame) {
     //Turning examples:
-    let chatswood: map::Station = map::Station::new(pt2(0.0, 200.0), "Chatswood");
-    let st_leonards: map::Station = map::Station::new(pt2(-150.0, 100.0), "St Leonards");
-    let atarmon: map::Station = map::Station::new(pt2(-100.0, -100.0), "Atarmon");
-    let north_sydney: map::Station = map::Station::new(pt2(100.0, 50.0), "North Sydney");
-    draw_line(&atarmon.coords, &chatswood.coords, "steelblue", _app, _f);
-    draw_line(&north_sydney.coords, &st_leonards.coords, "limegreen", _app, _f);
-    draw_line(&north_sydney.coords, &atarmon.coords, "deepskyblue", _app, _f);
-    draw_line(&st_leonards.coords, &chatswood.coords, "mediumpurple", _app, _f);
+    let s1: map::Station = map::Station::new_with_random_name(pt2(-304.0, 13.1));
+    let s2: map::Station = map::Station::new_with_random_name(pt2(-235.2, 146.4));
 
-    //Straight example:
-    let s1: map::Station = map::Station::new_with_random_name(pt2(-200.0, -150.0));
-    let s2: map::Station = map::Station::new_with_random_name(pt2(-200.0, 150.0));
-    draw_line(&s1.coords, &s2.coords, "coral", _app, _f);
-
-    //Draw the stations
-    chatswood.draw(_app, _f);
-    st_leonards.draw(_app, _f);
-    atarmon.draw(_app, _f);
-    north_sydney.draw(_app, _f);
-    s1.draw(_app, _f);
-    s2.draw(_app, _f);
+    draw_line(&s1.coords, &s2.coords, "coral", _app, &_f);
+    s1.draw(_app, &_f);
+    s2.draw(_app, &_f);
 }
 
 //This method is not finalised as I am yet to think of the algorithm to generate random maps

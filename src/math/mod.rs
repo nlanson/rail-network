@@ -85,10 +85,23 @@ pub fn find_turn_point(sp: &Point2, ep: &Point2) -> Option<Point2> {
           let gepend: Equation = Equation::find_eq_point_gradient(ep, Some(m));
           let intersection2: Point2 = Equation::find_intersection_wVert(&gepend, sp.x);
 
-          //Compare distance from SP to i1 and i2 and return the shorter one.
-          if (Seg::new(ep.clone(), intersection1).get_distance()) > (Seg::new(ep.clone(), intersection2).get_distance()) {
+
+          //If both intersections lie inbetween sp and ep, will return the one with a shorter distance from ep.          
+          if util::inbetween(&sp, &intersection1, &ep) && util::inbetween(&sp, &intersection2, &ep){
+            if (Seg::new(ep.clone(), intersection1).get_distance()) > (Seg::new(ep.clone(), intersection2).get_distance()) {
+              Some(intersection2)
+            } else {
+              Some(intersection1)
+            }
+          } 
+          //If one of them are outside, will return the one that IS inbetween.
+          else if util::inbetween(&sp, &intersection1, &ep) {
+            Some(intersection1)
+          } else if util::inbetween(&sp, &intersection2, &ep){
             Some(intersection2)
-          } else {
+          }
+          //Final fallback.
+          else {
             Some(intersection1)
           }
         }
