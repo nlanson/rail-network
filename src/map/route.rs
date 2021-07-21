@@ -175,14 +175,14 @@ impl NodeBased_Route {
         }
 
         let slope = Some(math::util::d2r(dir));
-        let seg: math::Seg = math::Seg::new_from_point_gradient(prevCoords, Some(2.0), dist);
+        let seg: math::Seg = math::Seg::new_from_point_gradient(prevCoords, slope, dist);
         return seg.end;
     }
 
     //Using the previous direction, generate a new direction.
     //Need to implement the chance for section to continue in same direction.
     fn gen_dir_from_prev_dir(prevdir: f32) -> f32 {
-        let mut dir: i32 = rand::thread_rng().gen_range((prevdir as i32)-90..(prevdir as i32)+90);
+        let mut dir: i32 = rand::thread_rng().gen_range((prevdir as i32)-20..(prevdir as i32)+20);
 
         loop {
             if dir > 360 {
@@ -230,7 +230,6 @@ impl NodeBased_Route {
         let mut stations: Vec<Station> = vec![];
         for i in 0..list.len() {
             stations.push(Station::new_with_random_name(list[i]));
-            println!("{}", list[i]);
         }
 
         stations

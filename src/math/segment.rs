@@ -42,7 +42,6 @@ impl Seg {
         
                 //Find end point using distance and point
                 let angle: f32 = util::r2d(m);
-                println!("angle {}", angle);
                 let y_dist: f32 = dist * angle.sin();
                 let x_dist: f32 = dist * angle.cos();
                 let ep: Point2 = pt2(sp.x+x_dist, sp.y+y_dist);
