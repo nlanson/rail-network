@@ -44,7 +44,23 @@ impl Seg {
                 let angle: f32 = util::r2d(m);
                 let y_dist: f32 = dist * angle.sin();
                 let x_dist: f32 = dist * angle.cos();
-                let ep: Point2 = pt2(sp.x+x_dist, sp.y+y_dist);
+
+                //Add or subtract the distances depending on if they are above or below zero.
+                let ep: Point2;
+                if x_dist<0.0 {
+                    if y_dist<0.0 {
+                        ep = pt2(sp.x-x_dist, sp.y-y_dist);
+                    } else {
+                        ep = pt2(sp.x-x_dist, sp.y+y_dist);
+                    }
+                } else {
+                    if y_dist<0.0 {
+                        ep = pt2(sp.x+x_dist, sp.y-y_dist);
+                    } else {
+                        ep = pt2(sp.x+x_dist, sp.y+y_dist);
+                    }
+                }
+
         
                 Self {
                     start: sp,
