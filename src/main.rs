@@ -8,7 +8,6 @@
 
     TODO:
      - Change/optimise Model and function to draw routes from model.
-     - Fix math::Seg::new_from_point_gradient() to find end point using trig
 */
 
 //External Dependencies
@@ -36,7 +35,7 @@ struct Model {
     
     //THE ARRAY LENGTH HERE IS SET TO ONE FOR TESTING PURPOSES
     //Meaning only one route needs to be generated.
-    map: [map::route::NodeBased_Route; 1] 
+    map: [map::route::NodeBasedRoute; 1] 
 }
 
 //Sets the initial Model state.
@@ -48,7 +47,7 @@ fn model(_app: &App) -> Model {
             Map gen only returns an array with ONE ROUTE only
             for testing purposes
        */
-        map: [map::route::NodeBased_Route::new()]
+        map: [map::route::NodeBasedRoute::new()]
     }
 }
 
