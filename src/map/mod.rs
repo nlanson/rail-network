@@ -11,4 +11,4 @@ pub mod station;
 pub mod route;
 
 //Binds
-pub use station::Station as Station;
+pub use station::Station as Station;   

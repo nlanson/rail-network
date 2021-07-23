@@ -36,7 +36,7 @@ impl NodeBasedRoute {
     pub fn new() -> Self {
         let route_name: String = String::from("T") + &(rand::thread_rng().gen_range(0..9) as u8).to_string();
         let route_colour: String = draw::util::random_colour();
-        let route_stations: Vec<Station> = Self::create_stations(rand::thread_rng().gen_range(4..8));
+        let route_stations: Vec<Station> = Self::create_stations(rand::thread_rng().gen_range(4..8), None);
 
         Self {
             name: route_name,
@@ -46,7 +46,19 @@ impl NodeBasedRoute {
 
     }
 
-    fn create_stations(count: usize) -> Vec<Station> {
+    pub fn new_from_known_point(sp: Point2) -> Self {
+        let route_name: String = String::from("T") + &(rand::thread_rng().gen_range(0..9) as u8).to_string();
+        let route_colour: String = draw::util::random_colour();
+        let route_stations: Vec<Station> = Self::create_stations(rand::thread_rng().gen_range(4..8), Some(sp));
+
+        Self {
+            name: route_name,
+            colour: route_colour,
+            stations: route_stations
+        }
+    }
+
+    fn create_stations(count: usize, start_point: Option<Point2>) -> Vec<Station> {
         //Function that returns an array of stations.
 
         //Initialise variables
@@ -75,8 +87,14 @@ impl NodeBasedRoute {
             
         */
 
-        //Create a random start point, validate that it lives in a quadrant then push it.
-        sp = pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0));
+        //Use an inputted starting point or create a new one.
+        match start_point {
+            Some(x) => {
+                sp = x;
+            },
+            None => sp = pt2(rand::thread_rng().gen_range(-600.0..600.0), rand::thread_rng().gen_range(-400.0..400.0))
+        }
+        
         quadrant = math::find_quadrant(&sp);
         Self::validate_quadrant(&mut sp, quadrant);
         deltaD = Self::get_deltaD_from_quadrant(quadrant);
