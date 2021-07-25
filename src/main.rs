@@ -35,7 +35,7 @@ struct Model {
     
     //THE ARRAY LENGTH HERE IS SET TO ONE FOR TESTING PURPOSES
     //Meaning only one route needs to be generated.
-    map: [map::route::NodeBasedRoute; 1] 
+    map: Vec<map::route::NodeBasedRoute>
 }
 
 //Sets the initial Model state.
@@ -47,7 +47,7 @@ fn model(_app: &App) -> Model {
             Map gen only returns an array with ONE ROUTE only
             for testing purposes
        */
-        map: [map::route::NodeBasedRoute::new()]
+        map: vec![map::route::NodeBasedRoute::new()]
     }
 }
 
