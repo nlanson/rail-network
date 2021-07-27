@@ -4,10 +4,10 @@
 /*
     Main module that initialises the App, creates Model and updates Model.
 
-    Last Change: finding the turning point between two lines.
+    Last Change: Gen routes from previous route end points
 
     TODO:
-     - Change/optimise Model and function to draw routes from model.
+     - Fix initial directions.
 */
 
 //External Dependencies
@@ -40,6 +40,11 @@ struct Model {
 
 //Sets the initial Model state.
 fn model(_app: &App) -> Model {
+    let mut map_vec: Vec<map::route::NodeBasedRoute> = vec![map::route::NodeBasedRoute::new()];
+    for i in 0..2 {
+        map_vec.push(map::route::NodeBasedRoute::new_from_known_point(map_vec[i].stations[map_vec[i].stations.len()-1].coords));
+    }
+    
     Model {
         _window: _app.new_window().size(1440, 1000).view(view).build().unwrap(),
        
@@ -47,7 +52,7 @@ fn model(_app: &App) -> Model {
             Map gen only returns an array with ONE ROUTE only
             for testing purposes
        */
-        map: vec![map::route::NodeBasedRoute::new()]
+        map: map_vec
     }
 }
 
